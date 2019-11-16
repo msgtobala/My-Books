@@ -192,10 +192,112 @@ This is ###### h6
 
 ##### Line Breaks
 
-Markdown is cool.
+Markdown is cool. <br/>This is really cool
 
-Markdown is realy cool
+```markdown
+Markdown is cool. <br /> This is really cool
+```
 
 
 
-Markdown is always cool
+###### Horizontal rules
+
+Something
+
+-----
+
+```markdown
+Something
+----
+
+or 
+Something
+====
+```
+
+##### BlockQuote
+
+> This is Sample Block quote
+
+ ```markdown
+> This is Sample Block quote
+ ```
+
+> **Block**
+
+```markdown
+> **Block**
+```
+
+&mdash;
+
+```markdown
+&mdash;
+```
+
+##### Code blocks
+
+Here is my code
+
+```javascript
+var a = 10;
+console.log(a);
+```
+
+```markdown
+​```js
+  var a = 10;
+  console.log(a);
+​```
+```
+
+
+
+``` var a = 10; ```
+
+```markdown
+​``` var a = 10; ```
+```
+
+` var a = 10 `
+
+```markdown
+` var a = 10; `
+```
+
+```diff
+- var a = 1;
++ var a = 10;
+```
+
+```markdown
+​```diff
+- var a = 1;
++ var a = 10;
+​```
+```
+
+##### Tables
+
+| S.No | Name   | Age  |
+| ---- | :----- | ---- |
+| 1    | Balaji | 21   |
+
+```markdown
+| S.No | Name | Age |
+|:-----|-----:|:---:|
+|1|balaji|21|
+```
+
+##### Github Treats
+
+* [x] HTML
+* [ ]  CSS
+* [x]  JS
+
+```markdown
+* [ ] HTML
+* [ ] CSS
+* [ ] JS
+```
+
