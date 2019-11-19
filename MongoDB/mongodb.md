@@ -2,7 +2,7 @@
 
 ## Show All Databases
 
-```
+```mariadb
 show dbs
 ```
 
@@ -232,7 +232,7 @@ db.posts.find({
        }
     }
   }
-)
+);
 ```
 
 ## Add Index
@@ -248,7 +248,7 @@ db.posts.find({
   $text: {
     $search: "\"Post O\""
     }
-})
+});
 ```
 
 ## Greater & Less Than
