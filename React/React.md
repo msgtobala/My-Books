@@ -146,7 +146,7 @@ const style = {
 
 ```react
  web.config.js -->  modules: true,
- localIdentName: '[name]__[local]__[hash:base64:5]' // in line no.  
+ localIdentName: '[name]__[local]__[hash:base64:5]' // in line no.  498
 ```
 
 * Source Map
@@ -205,6 +205,24 @@ export default ErrorBoundary;
 
 > In map method **Key** property should be attached and it should be on the **outer element/div/some outer tag**
 
+Key prop is important always and it used for identifying the differences in elements by React. This is made through [Reconciliation Algorithm](https://reactjs.org/docs/reconciliation.html).
+
+The **Key** prop should be,
+
+* stable 
+
+  > An element should always have the same key, regardless of its position in the array. This
+  > means key={index} is a bad choice.
+
+* Permanent
+
+  >An element’s key must not change between renders. This means key={Math.random()}
+  >is a bad choice.
+
+* Unique
+
+  	> No two elements should have the same key.
+
  `throw new Error('Some errorMessage'); // throws an error,this the error made by developer` 
 
 > Always Create **Containers**(statefull), **Components**(stateless), assets ... structure to maintain clean file structure
@@ -219,13 +237,13 @@ export default ErrorBoundary;
 
  ### Creation Phase
 
-| Phase                   | Description                                                  |
-| ----------------------- | ------------------------------------------------------------ |
-| constructor(props)      | **Instialized on component creation**.Dont reach out to web , No AJAX call. always Use super(props) |
-| componentWillmount()    | **Not used mostly, but there for historic reasons**          |
-| render()                | **Prepares JSX rendering code**                              |
-| Render child components | **Renders children components**                              |
-| componentDidmount()     | **Executed after all the components are mounted**. Reach out to the web, AJAX,Dont Update the state, causes **Re-rendering** |
+| Phase                                                        | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| constructor(props)                                           | **Instialized on component creation**.Dont reach out to web , No AJAX call. always Use super(props) |
+| componentWillmount()  now **static getDerivedStateFromProps(nextProps, prevState)** | **Not used mostly, but there for historic reasons**          |
+| render()                                                     | **Prepares JSX rendering code**                              |
+| Render child components                                      | **Renders children components**                              |
+| componentDidmount()                                          | **Executed after all the components are mounted**. Reach out to the web, AJAX,Dont Update the state, causes **Re-rendering** |
 
 ​                          
 
@@ -233,13 +251,14 @@ export default ErrorBoundary;
 
 ###### Triggered by Parent ( Change in props)
 
-| Phase                                       | Description                                                  |
-| ------------------------------------------- | ------------------------------------------------------------ |
-| componentWillReceiveProps(nextProps)        | **Used for sync in state**. Dont Reach out to web            |
-| shouldComponentUpdate(nextProps, nextState) | return true or false. Update - true,Not update - false(updated but not reflected in DOM). return true when **nextProps.XY !== this.props.XY && nextState.XY !== nextState.XY** |
-| componentWillUpdate(nextProps, nextState)   | **Used for sync in state**                                   |
-| render(), rendering children                | **Prepares JSX rendering code**                              |
-| componentDidUpdate()                        | **Executed after all the updated components are updated**. Can Reach out to web. Dont update state, Causes **re-rendering** |
+| Phase                                                        | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| componentWillReceiveProps(nextProps) now **static getDerivedStateFromProps(nextProps, prevState)** | **Used for sync in state**. Dont Reach out to web            |
+| shouldComponentUpdate(nextProps, nextState)                  | return true or false. Update - true,Not update - false(updated but not reflected in DOM). return true when **nextProps.XY !== this.props.XY && nextState.XY !== nextState.XY** |
+| componentWillUpdate(nextProps, nextState)                    | **Used for sync in state**                                   |
+| render(), rendering children                                 | **Prepares JSX rendering code**                              |
+| getSnapshotBeforeUpdate(nextProps, nextState)                | returns the snapshot                                         |
+| componentDidUpdate(prevProps, prevState, snapshot)           | **Executed after all the updated components are updated**. Can Reach out to web. Dont update state, Causes **re-rendering** |
 
 ###### Triggred when change in state
 
@@ -249,6 +268,20 @@ export default ErrorBoundary;
 | componentWillUpdate()                        |
 | render(), rendering child components         |
 | componentDidUpdate()                         |
+
+### De-mounting Phase
+
+| Phase                  | Description                                                  |
+| ---------------------- | ------------------------------------------------------------ |
+| componentWillUnmount() | This will be called when the component is un-mounted. You should invalidate any timers you created (using clearInterval() or clearTimeout()),disable event handlers (with removeEventListener()), and perform any other necessary cleanup. |
+
+### Error Phase
+
+| Phase               | Description                                                  |
+| ------------------- | ------------------------------------------------------------ |
+| componentDidCatch() | This will be called once there is some error in the component after the render. It is triggered only when the children throws error. It is not invoked if the error happened within the component itself |
+
+
 
 > In **version 16.3**, we should not use componentWillMount(), componentWillUpate(), componentWilReceiveProps(). Instead use 
 >
@@ -289,7 +322,7 @@ An alternative to **shouldComponentUpdate()** is ***PureComponent*** (strict che
 
 ###### Example
 
-```js
+```react
 return [
   <p key = "1"></p>
   <p key = "2"></p>
@@ -377,7 +410,7 @@ export default withClass(App, classes.App);  // classes.App = className for the 
 
 ```react
 this.setState((prevState, props) => {
-return { XY_Counter_Value_that_depends_on_prev_state:prevState.XY_Counter_Value_of_on_prev_state_counter+ 1;
+	return { 		XY_Counter_Value_that_depends_on_prev_state:prevState.XY_Counter_Value_of_on_prev_state_counter+ 1;
 }
 });
 ```
@@ -385,72 +418,365 @@ return { XY_Counter_Value_that_depends_on_prev_state:prevState.XY_Counter_Value_
  
 
 ```react
+this.setState((prevState, props)=>{
+  return {
+    counter: prevState.counter + 1
+  }
+});
+```
 
+This is called as **Functional setState.**
+
+```react
+this.setState((state, props)=>{
+  return {
+    key: state.value + 1
+  }
+});
 ```
 
 
 
-  this.setState((prevState, props) => {
+### Sequential setStates
 
-​    return {
-
-​       XY_Counter_Value_that_depends_on_prev_state: prevState.XY_Counter_Value_of_on_prev_state_counter + 1;
-
-​    }
-
-  });
-
- 
-
-  this.setState((prevState, props)=>{
-
-​    return {
-
-​      counter: prevState.counter + 1
-
-​    }
-
-  });
-
- 
-
-18) prop-types  **** Use only in Class Component ****
-
-  desc: Used for validating the datatypes in the component.Throws Error
-
- 
-
-  npm install --save prop-types;
-
- 
-
-  className.propTypes = { state_field: PropTypes.type}
-
-  \-------------------------------------------------------------------------------------------------------
-
-  ex:
-
-  import PropTypes from 'prop-types';
-
- 
-
-  Person.propTypes = {
-
-​    name:PropTypes.string,
-
-​    Changed:PropTypes.func,
-
-​    deleted:PropTypes.func,
-
-​    age:PropTypes.number
-
+```react
+this.setState((state, props) => {
+  return {
+  	value: state.value + 1
   }
+});
+this.setState((state, props) => {
+  return {
+  	value: state.value + 1
+  }
+});
+this.setState((state, props) => {
+  return {
+  	value: state.value + 1
+  }
+});
+```
 
- 
+>This would work as expected, eventually incrementing value by 3. It works because calling setState
+>“queues” the updates in the order they’re called, and when they’re executed, they receive the latest state
+>as an argument instead of using a potentially-stale this.state.
 
-  prop-types works only in Class Component and not in functional Components
+*What is pure function?*
 
- 
+A function **without side effects** is called as pure function.Functional setState is the preferred way to call setState because it’s guaranteed to work correctly, everytime. Try to use it whenever you can.
+
+* **Props** are read-only, state are read. 
+
+#### Prop-types
+
+> Use only in Class Component. Used for validating the datatypes in the component.Throws Error for data type mis-matches
+
+ ##### How to Use?
+
+* npm install --save prop-types;
+* import PropTypes from 'prop-types';
+* className.propTypes = { state_field: PropTypes.type}
+
+#### Example
+
+```react
+import PropTypes from 'prop-types';
+Person.propTypes = {
+  name:PropTypes.string,
+  Changed:PropTypes.func,
+  deleted:PropTypes.func,
+  age:PropTypes.number
+}
+```
+
+ **prop-types** works only in Class Component and not in functional Components
+
+#### Types of Prop-Types validators
+
+* PropTypes.array
+* PropTypes.bool
+* PropTypes.number
+* PropTypes.func
+* PropTypes.object
+* PropTypes.string
+* PropTypes.node
+* PropTypes.element
+
+#### Instance of 
+
+> Will check props is an instance of specific class
+
+PropTypes.instanceOf(<className>);
+
+* To Limit the **prop** to specific values with oneOf:
+
+`PropTypes.oneOf(['person', 1234, true]);`
+
+* To Check **prop** is one of a few types
+
+`PropTypes.oneOfType([ PropTypes.array, PropTypes.object, PropTypes.number ])`
+
+* To Check Array with specific data type
+
+  `PropTypes.array(PropTypes.string);`
+
+* To Check Object with specific data type
+
+  `PropTypes.object(PropTypes.string);`
+
+* To Object has specific schema
+
+  ```react
+  PropTypes.shape({
+    name: PropTypes.string,
+    age: PropTypes.number
+  });
+  ```
+
+### Required Props
+
+```js
+PropTypes.bool.isRequired
+PropTypes.oneOf(['person', 'place', 1234]).isRequired
+PropTypes.shape({
+  name: PropTypes.string,
+  age: PropTypes.number
+}).isRequired
+```
+
+## Custom Validators
+
+> We can create a custom validator for props using propTypes package. The function should take a prop, prop name, prop type and component name and should return a error. It should return error, it should not throw error.
+
+#### Example
+
+Build a prop type to check whether the passed prop is of length 3.
+
+```react
+// Custom PropType
+function customValidator(props, propName, componentName) {
+  if(props[propsName].length !== 3) {
+     return new Error(`Invalid prop ${propsName} supplied to ${componentName}. Length is not    			3`);
+   }
+}
+
+// Custom Function
+import PropTypes from 'prop-types';
+import CustomValidator from './customValidator';
+const CustomComp = ({ myCustomProp }) => {
+  <span>{myCustomProp}</span>
+}
+
+CustomComp.PropTypes = {
+  myCustomProp: customValidator
+}
+
+// Passing prop to custom component
+import CustomComp from './CustomComp';
+class TestComponent extends Component {
+  render () {
+    return (
+    	<CustomComp myCustomProp='abc' />
+    )
+  }
+}
+```
+
+
+
+## [REACT](https://reactjs.org) CHILDREN
+
+>The text node wrapped in a react component are called as children. It switches between the data-types of object and array.
+>
+>* When there is only one child (**React Element**), it has the data-type of object
+>* When there is multiple children(**React Elements**), it has the data-type of array
+
+We can access this children through React.Children / props.children
+
+**React Provides many utility function for children**,
+
+* `React.Children.map(children, function)`
+* `React.Children.forEach(children, function)`
+* `React.Children.count(children)`
+* `React.Children.only(children)` - returns the single child or it throws error if there are more than one child
+* `React.Children.toArray(children)`
+
+### PropTypes for children
+
+```js
+propTypes: {
+  children: PropTypes.element // If you want it to accept only a single child, use the element 																validator
+}
+```
+
+```js
+propTypes: {
+  children: PropTypes.node //If you want your component to accept zero, one, or more children, 														use the .node validator
+}
+```
+
+* PropTypes.element - accepts only single React Element and it will not accept the string or number
+* PropTypes.node - accepts both React Element and Number / String with one or more React.Element
+
+**If you need to allow an element or a string, you can use the node validator (which will accept elements,**
+**strings, and more) or be more explicit with a oneOfType validator like this:**
+
+```js
+propTypes.oneOfType({
+  propTypes.element,
+  propTypes.string,
+  propTypes.number
+});
+
+or 
+propTypes: {
+  propTypes.node
+}
+```
+
+
+
+### Customizing React Children Before Rendering
+
+In the example above, we simply inserted some text. What if we wanted to do something more ex-
+pressive, like creating our own custom component hierarchy?
+
+Imagine that we constructed our own “API” of sorts for expressing a navigation header
+
+```react
+function Parent = () => {
+  return (
+    <NavChild>
+    	<Nav>
+        <NavItem url='/'>Home</NavItem>
+        <NavItem url='/about'>About</NavItem>
+        <NavItem url='/contact'>Contact</NavItem>
+			</Nav>
+    </NavChild>
+  )
+}
+```
+
+```react
+function NavChild({ children }) {
+  let items = React.Children.toArray(children);
+  for(let i = items.length - 1; i >= 1; i--) {x
+  	items.splice(i, 0,<span key={i} className='separator'>|</span>);
+  }
+  return (
+  	<div>{items}</div>
+  );
+}
+```
+
+# Shallow and Deep Merge
+
+#### Shallow Merge
+
+```react
+state = {
+  name: 'test',
+  user: {
+    age: 1,
+    gender: 'male'
+  },
+  dob: '11/02/1998'
+};
+
+this.setState({
+  name: 'testing'
+}); // this is replace only the name key with new value and leave all other fields untouched
+```
+
+
+
+#### Deep Merge
+
+```react
+state = {
+  name: 'test',
+  user: {
+    age: 1,
+    gender: 'male'
+  },
+  dob: '11/02/1998'
+};
+
+this.setState({
+  user: {
+    age: 21
+  }
+}); // this will replace entrie user object and replaces with the object, hence gender no more        available
+```
+
+
+
+## Events
+
+> The events is javascript are called as Synthetic events. Each events has **events object** created. By default react events are pooled which means that the event object are not created each time , react replaces only the values of previous **event object**
+
+>The event object passed to a handler function is only valid right at that moment. The SyntheticEvent
+>object is pooled for performance. Instead of creating a new one for every event, React replaces the
+>contents of the one single instance. The event objects are nullified by react. There are pooled by react by default.
+
+```react
+function onClick(event) {
+  console.log(event); // => nullified object.
+  console.log(event.type); // => "click"
+  const eventType = event.type; // => "click"
+
+  setTimeout(function() {
+    console.log(event.type); // => null
+    console.log(eventType); // => "click"
+  }, 0);
+
+  // Won't work. this.state.clickEvent will only contain null values.
+  this.setState({clickEvent: event});
+
+  // You can still export event properties.
+  this.setState({eventType: event.type});
+}
+```
+
+> **Note**
+>
+> If you want to access the event properties in an asynchronous way, you should call `event.persist()` on the event, which will remove the synthetic event from the pool and allow references to the event to be retained by user code.
+
+#### Example
+
+```react
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends React.Component {
+  btnClickHandler = (event) => {
+    event.persist();
+    console.log(event);
+    console.log(event.bubbles);
+    const eventType = event.type;
+    setTimeout(function() {
+      console.log(event);
+      console.log(event.type);
+    }, 0);
+    console.log(event);
+  }
+  render () {
+    return (
+      <button onClick={(e) => this.btnClickHandler(e)}>Click me</button>
+    )
+  }
+}
+
+export default App;
+```
+
+>React is a declarative way not imperative way( Angular, jQuery)
+
+## Types of Inputs
+
+* Controlled Inputs - **binded with state**
+* Un-Controlled Inputs - **not binded state**
 
 19) Reference - Ref
 
@@ -2570,9 +2896,7 @@ The new life cycles added are,
   - Must be implemented with componentDidUpdate()
   - Must return something
 
-**LIFE CYCLES IN REACT**
-
- 
+**SET INTERVAL WITH LIFE CYCLES IN REACT**
 
 - Use SetInterval() in **componentDidMount()** 
 - Use clearInterval() in **componentWillUnmount()** 
@@ -2669,3 +2993,5 @@ All webpack installs
 ** npm install --save-dev html-webpack-plugin
 
 ** npm install --save-dev rimraf
+
+`<p>hgsd<p>`
