@@ -91,7 +91,7 @@ db.<collection>.insertMany([
 ]);
 ```
 
-a / Find the Data**
+**Find the Data**
 
 ```mariadb
  db.<collection>.find();
