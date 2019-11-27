@@ -778,217 +778,132 @@ export default App;
 * Controlled Inputs - **binded with state**
 * Un-Controlled Inputs - **not binded state**
 
-19) Reference - Ref
+### React Refs
 
-  Available only in Containers, only for focus of the input field
+Available only in Containers, only for focus of the input field and in rare cases
 
-  desc: Used to access focus() and media Playback...
+>Used to access focus() and media Playback...
 
-  video attach : 099
+* video attach : 099
 
-  ex:
+#### Example
 
-​    <input
+```react
+<input ref = {(inp)=>{ this.inputElement = inp }}/>
+```
 
-​      ref = {(inp)=>{ this.inputElement = inp }}/>
+Now we can access the inputElement in the Class as Reference. 
 
- 
+In componentDidMount,
 
-​    Now we can access the inputElement in the Class as Reference
+ ```react
+componentDidMount () {
+  if(this.props.pos === 0){
+    this.inputElement.focus();
+   }
+}
+ ```
 
- 
+ Because, in componenDidMount() all the components have been mounted
 
-​    In componentDidMount () {
+* Refer Video attach: 099
 
-​      if(this.props.pos === 0){
+ In new **react 16.3**, there is React.createRef(),
 
-​        this.inputElement.focus();
-
-​      }
-
-​    }
-
-​    Because, in componenDidMount() all the components have been mounted
-
- 
-
-​    Refer Video attach: 099
-
- 
-
-In new react 16.3, there is React.createRef()
-
-in class/constructor declare a ref variable like
-
- this.inputElement = React.createRef() // in constructor
-
-inputElelement = React.createRef() // not in constructor
-
- 
+In class -> **constructor** declare a ref variable like `this.inputElement = React.createRef()` // in constructor
 
 connect the ref variable in input like,
 
-ref = {this.inputElemenet}
+`ref = {this.inputElemenet}`
 
+`this.inputElement.focus`
+
+----
+
+ ### **Burger Builder**
+
+* Transform Object to Array
+
+  **Object.keys(OBJ) will return arrays of keys of the object**
+
+### Example
+
+```react
+ingredients = {
+  salad: 1,
+  meat: 2,
+  bacon: 1,
+  cheese: 2
+};
  
+const transformedIngredients = Object.keys(ingredients).map(igKey => {
+  return [...Array(ingredients[igKey])].map((_,index)=>{
+    return <BurgerIngredient key = {key + index} type = igKey />
+  })
+}).reduce((arr,el)=>{
+  return arr.concat(el);
+},[]);
+```
 
-this.inputElement.focus
+####  **Reduce**
 
-\-----------------------------------------------------------------------------------------------------------
+```js
+var  array1 = [[1,2],[1,2,3],[0]];
+const transformedArray = array1.reduce((arr, el)=>{
+  return arr.concat(el)
+},[]);
+console.log(transformedArray); // Output: [1, 2, 1, 2, 3, 0]
+```
 
-​                        Burger Builder
+#### **Map, Reduce**
 
- 
+Reduce will repeat the logic for each amount in the array and then return a single value.
 
-  Transform Object to Array
+#### Example
 
-  \-------------------------
+Calculate Sum
 
-  Object.keys(OBJ) will return arrays of keys of the object
+```js
+var euros = [29.76, 41.85, 46.5];
+var sum = euros.reduce( function(total, amount){
+  return total + amount
+},0);
+sum // 118.11
+```
 
-  example:
+calculate Average
 
-   ingredients = {
-
-​     salad: 1,
-
-​     meat: 2,
-
-​     bacon: 1,
-
-​     cheese: 2
-
-   };
-
- 
-
-   const transformedIngredients = Object.keys(ingredients).map(igKey => {
-
-​     return [...Array(ingredients[igKey])].map((_,index)=>{
-
-​       return <BurgerIngredient key = {key + index} type = igKey />
-
-​     })
-
-   }).reduce((arr,el)=>{
-
-​     return arr.concat(el);
-
-   },[]);
-
-​    
-
-   Using Reduce
-
-   \------------
-
-   array1 = [[1,2],[1,2,3],[0]];
-
- 
-
-   const transformedArray = array1.reduce((arr, el)=>{
-
-​     return arr.concat(el)
-
-   },[]);
-
- 
-
-   console.log(transformedArray); // Output: [1, 2, 1, 2, 3, 0]
-
- 
-
-   
-
- 
-
-20) Map, Reduce
-
- 
-
-  the Reduce Method In JavaScript gives you a mini CodePen
-
-  where you can write whatever logic you want.
-
-  It will repeat the logic for each amount in the array and then return a single value.
-
- 
-
-  ex:
-
-  var euros = [29.76, 41.85, 46.5];
-
-  var sum = euros.reduce( function(total, amount){
-
-   return total + amount
-
-  },0);
-
- 
-
-  sum // 118.11
-
- 
-
-  const euros = [29.76, 41.85, 46.5];
-
-  const average = euros.reduce((total, amount, index, array) => {
-
+  ```js
+const euros = [29.76, 41.85, 46.5];
+const average = euros.reduce((total, amount, index, array) => {
   total += amount;
-
   if( index === array.length-1) {
-
-   return total/array.length;
-
+    return total/array.length;
   }else {
-
-   return total;
-
+    return total;
   }
+});
+average // 39.37
+  ```
 
-  });
+Calculate Count of the Objects
 
- 
+ ```js
+const fruitBasket = ['banana', 'cherry', 
+                     'orange', 'apple', 'cherry', 'orange', 'apple', 'banana', 
+                     'cherry', 'orange', 'fig' ];
 
-  average // 39.37
+const count = fruitBasket.reduce( (tally, fruit) => {
+  tally[fruit] = (tally[fruit] || 0) + 1 ;
+  return tally;
+} , {});
+console.log("/n",count);
+output: {'banana': 2, 'cherry': 3, 'orange': 3, 'apple': 2, 'fig': 1}   
+ ```
 
- 
+ Refer: [Medium](https://medium.freecodecamp.org/reduce-f47a7da511a9)
 
- 
 
-  ****** count the objects ******
-
- 
-
-  const fruitBasket = ['banana', 'cherry',
-
-​           'orange', 'apple', 'cherry', 'orange', 'apple', 'banana',
-
-​           'cherry', 'orange', 'fig' ];
-
- 
-
-  const count = fruitBasket.reduce( (tally, fruit) => {
-
-​     tally[fruit] = (tally[fruit] || 0) + 1 ;
-
-​     return tally;
-
-  } , {});
-
- 
-
-  console.log("/n",count);
-
- 
-
-  output: {'banana': 2, 'cherry': 3, 'orange': 3, 'apple': 2, 'fig': 1}  
-
- 
-
- 
-
-  Refer: https://medium.freecodecamp.org/reduce-f47a7da511a9 
 
  
 
