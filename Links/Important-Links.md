@@ -6,3 +6,7 @@
 
 **[FlatMap in Array](https://medium.com/dailyjs/javascript-array-flatmap-5070430fae0c)**
 
+**[XSS attack in React](https://dev.to/jam3/how-to-prevent-xss-attacks-when-using-dangerouslysetinnerhtml-in-react-1464)**
+
+**[Modules and Exports](https://medium.com/dailyjs/javascript-module-cheatsheet-7bd474f1d829)**
+
