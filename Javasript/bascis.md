@@ -482,6 +482,8 @@ switch(a) {
 }
 ```
 
+### Loops
+
 **For Loops**
 
 ```js
@@ -490,41 +492,337 @@ for (var i = 0;i < n;i++) {
 }
 ```
 
+**Nested Loops**
 
+```js
+for (var i = 0;i < n;i++) {
+  for (var j = 0;j < n;j++) {
+    console.log(i*j);
+  }
+}
+```
 
+**break and continue**
 
+```js
+for(var i = 0;i < 5;i++) {
+  if (i === 1) {
+      break;
+   }
+  console.log(i);
+}
+// 0 
+```
 
+```js
+for(var i = 0;i < 5;i++) {
+  if (i === 1) {
+      continue;
+   }
+  console.log(i);
+}
+// 0 2 3 4 
+```
 
+* **break** keyword break the immediate loop
+* **continue** will skip executing the statements below that are scoped within the loop
 
+**Looping through Arrays**
 
+```js
+var a = [1, 2, 3];
+for(var i = 0;i<a.length;i++) {
+  console.log(a[i]);
+}
+```
 
+**while loops**
 
+```js
+var a = 0;
+while(a < 5) {
+  console.log(a);
+  a++;
+}
+```
 
+**Do while loops**
 
+```js
+var condition = false;
+do {
+  console.log('Executed ');
+} while(condition)
+```
 
+* do-while loop will be executed once always and in the second iteration, the conditions are checked
 
+**Operators**
 
+```js
+var a = 5;
+var b = 10;
 
+a += b; // a = a + b (shorthand syntax)
+console.log(a); // 15
+```
 
+**Javascript** always tries to create **strings**
 
+```js
+var a = 3;
+var b = '3';
+console.log(a + b); // 33
+```
 
+```js
+var a = true;
+var b = 'join';
+console.log(a + b); // truejoin
+```
 
+```js
+var a = [1, 2 ,3];
+var b = '3';
+console.log(a + b); // 1,2,33
+```
 
+```js
+var a = [1, 2 ,3];
+var b = ' join';
+console.log(a + b); // 1,2,3 join
+```
 
+Performing operations with undefined always gives undefined
 
+```js
+1 + undefined // undefined
+1 + NaN // NaN 
+```
 
+JS has bug on multiplication and divison of **floating numbers**
 
+```js
+1.3 * 2.2 // 2.8600000000000003
+3.3 / 2.3 // 1.434782608695652
+```
 
+This will be fixed with **toFixed(2)**
 
+* == - compares the **value**
+* === - compares value and the data type also
 
+**Ternary Operators**
 
+```js
+var a = 5;
+var b = 6;
+a === b ? console.log('Eqaul') : console.log('Not Equal'); or
+console.log(a===b ? 'Equal' : 'Not Equal');
+```
 
+**Precedence**
 
+[Refer here for Precedence](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence)
 
+### 3) Types and Scopes
 
+**Types**
 
+* Primitive Type
+* Reference Type
 
+**Primitive Types**
 
+```js
+var a = 1;
+var b = a;
+console.log(a, b); // 1, 1
+b = 2;
+console.log(a, b); // 2, 1
+```
+
+So, In Primitive data types the values are copied
+
+**Reference Types**
+
+```js
+var a = {
+  'test': 5
+};
+var b = a; 
+console.log(a, b); { 'test': 5}, { 'test': 6 }
+b.test = 6;
+console.log(a, b); { 'test': 6 }, { 'test': 6 }
+```
+
+In Reference types the value are not stored inside of variables but the variables are pointed to the values in the memory.In-order to prevent  polluting the memory, a and b are pointed to same memory as they have the same values
+
+```js
+var a = [1, 2, 3];
+var b = a;
+b.push(4);
+console.log(a, b); [1, 2, 3, 4], [1, 2, 3, 4]
+```
+
+```js
+var a = [1, 2, 3];
+var b = a;
+b = ['a', 'b', 'c']
+console.log(a, b); [1, 2, 3, 4], ['a', 'b', 'c']
+```
+
+* For **Primitive types** the values are copied
+* For **Refernce Types** the values are not copied but pointed to the same location(this is made not pollute the memory)
+
+**Scope**
+
+> It is the Registry where the variables are stored
+
+ES5 scope,
+
+* Global Scope(window)
+* Local Scope(Nested in global scope)i.e inside function - independent from the global scope
+
+> Note: Function can access local and global scope variables through Closures 
+
+```js
+var test = 'Global Scope';
+console.log(this); // window object
+console.log(this.a);  // Global. Scope
+```
+
+All the global variables are attached to window object as Global scope.
+
+ ```js
+var test = 'Global Scope';
+function localScope() {
+  console.log(test); // Global Scope 
+}
+localScope();
+// This is called as closure
+ ```
+
+**Closures**
+
+The inner function has the access to outer **variables and function**
+
+```js
+var test = 'Global Scope';
+function localScope() {
+  var test = 'Local Scope'
+  console.log(test); // Local Scope 
+}
+localScope();
+```
+
+```js
+var test = 'Global Scope';
+function localScope() {
+  var test = 'Local Scope'; 
+  console.log(test);
+}
+localScope();
+console.log(test);  
+// o/p: Local Scope, Global Scope
+```
+
+```js
+function test() {
+  var a = 'Local scope';
+  console.log(a); // Local Scope
+}
+test(); 
+console.log(a); // a is not defined
+```
+
+```js
+function test() {
+  a = 'Local scope';
+  console.log(a); // Local Scope
+}
+test(); 
+console.log(a); // Local Scope
+```
+
+Now, **a** is global variable now. So it is accessed everywhere. This is not possible in **strict mode**. This is **not Recommended**
+
+ ### 4) Arrays
+
+ Collection of same of different data type elements
+
+`var a = [1, 2, ,3]`
+
+```js
+var a = [1, 2, 3];
+console.log(a);
+console.log(a.length);
+console.log(a[1]);
+a[1] = 100;
+console.log(a);
+a[3] = 100;
+console.log(a);
+a[5] = 6;
+console.log(a);
+// [1, 2, 3], 3, 100, [1, 2, ,3 ,100], [1, 2, 3, 100, undefined, 6]
+```
+
+**forEach Loop**
+
+### Syntax
+
+```js
+array.forEach(fucntion() {});
+```
+
+#### Example
+
+```js
+var array = [1, 2, 3];
+array.forEach(function(element, index, actualArray) { 
+	console.log(element, index, actualArray);
+});
+// 1 0 [1, 2, 3]
+// 2 1 [1, 2, 3]
+// 3 2 [1, 2, 3]
+```
+
+**Array Methods**
+
+* push
+* pop
+* shift
+* unshift
+* splice
+* slice
+
+ **push**
+
+```js
+var a = [1, 2, 3];
+a.push(4);
+console.log(a);
+// [1, 2, 3, 4]
+```
+
+```js
+var a = [1,2,3,,];
+console.log(a);
+a[4] = 5;
+console.log(a);
+// [1, 2, 3, undefined], [1, 2, 3, undefined, 5]
+```
+
+**pop**
+
+This array method removes the last element and returns the pop element. 
+
+```js
+var a = [1, 2, 3];
+console.log(a.pop());
+console.log(a);
+// 3, [1, 2]
+```
 
 
 
