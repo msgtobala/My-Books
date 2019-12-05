@@ -10,3 +10,7 @@
 
 **[Modules and Exports](https://medium.com/dailyjs/javascript-module-cheatsheet-7bd474f1d829)**
 
+**[Mixins in javascript](https://javascript.info/mixins)**
+
+**[How Sort Works in Javascript](https://itnext.io/how-to-sort-an-array-in-javascript-f6cc7a26b34d)**
+
