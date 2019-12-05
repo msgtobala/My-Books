@@ -6,7 +6,7 @@
 
 **How webpage works**
 
-![image-20191206012424504](/Users/apple/Library/Application Support/typora-user-images/image-20191206012424504.png)
+![image-20191206012424504](/Users/apple/Documents/Books/images/how-browser-works.png)
 
 ## Versions of Javascript / What is ECMAScript
 
