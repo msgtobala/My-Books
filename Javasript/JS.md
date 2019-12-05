@@ -1,10 +1,12 @@
-cJAVASCRIPT - THE BASICS
+# JAVASCRIPT - THE BASICS
 
+## What is Javascript ? Where does Javascript run ?
 
+**Javascript** is dynamic weekly typed programming language.It was called as **LiveScript** and renamed to Javascript due to popularity of **Java**.**Javascript** runs on the **browser**. It is very powerful for web development. It can also run on server using **node js** 
 
-## Where does Javascript run ?
+**How webpage works**
 
-**Javascript** runs on the **browser**. It is very powerful for web development. It can also run on server using **node js** 
+![image-20191206012424504](/Users/apple/Library/Application Support/typora-user-images/image-20191206012424504.png)
 
 ## Versions of Javascript / What is ECMAScript
 
@@ -1555,7 +1557,129 @@ obj.fn.bind(person)();
 // Object { name: 'balaji' }
 ```
 
+```js
+function test() {
+  var obj = {
+    name: 'balaji',
+    fn: function () {
+      console.log(this);
+    }
+  }
+  obj.fn();
+}
+test();
+// Object { name: 'balaji', fn: fn}
+```
 
+```js
+var obj = {
+  name: 'balaji',
+  test: function() {
+    console.log(this);
+  }
+}
+obj.test();
+// Object { name: 'balaji', fn: fn} 
+```
+
+```js
+var video = {
+  title: 'a',
+  play() {
+    console.log(this);
+  }
+}
+video.play();
+video.stop = function () {
+  console.log(this);
+}
+video.stop();
+// Object { title: 'a', play: fn}
+// Object { title: 'a', play: fn, stop: fn}
+```
+
+```js
+function playVideo () {
+  console.log(this);
+}
+playVideo();
+// window object
+```
+
+**this constructor functions**
+
+```js
+function Video (name) {
+  this.name = name;
+  console.log(this);
+}
+
+var video = new Video('b');
+//Video {name: "b"}
+```
+
+**Rules**
+
+* In Regular function - **window object**
+* In constructor function - **Instance / caller**
+* In Function which is in object - **Instance / caller**
+
+**Wiered this**
+
+```js
+var video = {
+  title: 'This is',
+  tags: ['a', 'b', 'c'],
+  showTags() {
+    this.tags.forEach(function(tag){
+      console.log(this.title+' ' tag);
+    })
+  }
+}
+video.showTags();
+// undefined a
+// undefined b
+// undefined c
+```
+
+This is because we are in callback function.This can be solved with **forEach** second parameter `forEach(callback, thisArgs)`
+
+#### Example
+
+```js
+var video = {
+  title: 'This is',
+  tags: ['a', 'b', 'c'],
+  showTags() {
+    this.tags.forEach(function(tag){
+      console.log(this.title + ' ' + tag);
+    }, this);
+  }
+}
+video.showTags();
+// "This is a"
+// "This is b"
+// "This is c"
+```
+
+**Another Way**
+
+```js
+var video = {
+  title: 'This is',
+  tags: ['a', 'b', 'c'],
+  showTags() {
+    var _this = this;
+    this.tags.forEach(function(tag){
+      console.log(_this.title+' ' + tag);
+    });
+  }
+}
+video.showTags();
+// "This is a"
+// "This is b"
+// "This is c"
+```
 
 **Mixins in javascript**
 
