@@ -6,7 +6,7 @@
 
 **How webpage works**
 
-![image-20191206012424504](/Users/apple/Documents/Books/images/how-browser-works.png)
+![image-20191206012424504](https://github.com/msgtobala/My-Books/blob/master/images/how-browser-works.png)
 
 ## Versions of Javascript / What is ECMAScript
 
