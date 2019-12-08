@@ -1606,6 +1606,8 @@ playVideo();
 // window object
 ```
 
+> Note: If you are in **strict mode** then this will be **undefined**
+
 **this constructor functions**
 
 ```js
@@ -1680,6 +1682,485 @@ video.showTags();
 // "This is b"
 // "This is c"
 ```
+
+**Factory Functions**
+
+**Factory Functions** are used to create object. It is same like Constructor functions
+
+#### Example
+
+```js
+function createCircle(radius) {
+  return {
+    radius: radius,
+    draw() {
+      console.log('draw');
+    }
+  }
+}
+var circle = createCircle(1);
+console.log(circle);
+// {radius: 1, draw: ƒ}
+```
+
+**bind, call, apply**
+
+They are used to control the invocation of functions.
+
+**call(), apply()** are introduced in ES3. **bind()** is introduced in ES5. You can use `call() `  / `apply()` to invoke the function immediately. `bind()` returns a bound function that, when executed later, will have the correct context (**"this"**) for calling the original function. So `bind()` can be used when the function needs to be called later in certain events when it's useful.
+
+* bind
+
+```js
+function fn(message) {
+  console.log(message + this.name);
+}
+
+var obj = {
+  fn: fn,
+  name: 'balaji'
+}
+
+obj.fn.bind(obj, 'Hello ')();
+// Hello balaji
+```
+
+**bind** always takes multiple arguments, first arg will be always that what **this** should be bound. And rest will be function args.
+
+* call
+
+```js
+function fn(message) {
+  console.log(message + this.name);
+}
+
+var obj = {
+  fn: fn,
+  name: 'balaji'
+}
+
+obj.fn.call(obj, 'Hello ');
+// Hello balaji
+```
+
+```js
+var obj = {name:"Niladri"};
+
+var greeting = function(a,b,c){
+    return "welcome "+this.name+" to "+a+" "+b+" in "+c;
+};
+
+console.log(greeting.call(obj,"Newtown","KOLKATA","WB"));
+// returns output as welcome Niladri to Newtown KOLKATA in WB
+```
+
+The difference between **call** and **bind** is that call will be called automatically but for bind we should call it.
+
+* **apply**
+
+```js
+function fn(message) {
+  console.log(message + this.name);
+}
+
+var obj = {
+  fn: fn,
+  name: 'balaji'
+}
+
+obj.fn.apply(obj, ['Hello ']);
+// Hello balaji
+```
+
+The difference between call and apply is that apply will accept arguments as an array.
+
+```js
+var myMethod = function () { 
+  console.log(this.a);
+};
+
+var obj1 = {
+  a: 2,
+  myMethod: myMethod
+};
+
+var obj2 = {
+  a: 3,
+  myMethod: myMethod
+};
+
+obj1.myMethod(); // 2
+obj2.myMethod(); // 3
+
+obj1.myMethod.call( obj2 ); // 3
+obj2.myMethod.call( obj1 ); // 2
+```
+
+Rather than implicit binding,  explicit binding will take precedence. 
+
+**Hard binding**
+
+**Hard binding** is the binding done with bind(). Always bind() (**Hard binding**) will take precedence that implicit and explicit bindings
+
+#### Example
+
+```js
+var myMethod = function () { 
+  console.log(this.a);
+};
+
+var obj1 = {
+  a: 2
+};
+
+var obj2 = {
+  a: 3
+};
+
+myMethod = myMethod.bind(obj1); // 2
+myMethod.call( obj2 ); // 2
+```
+
+```js
+var myMethod = function () { 
+  console.log(this.a);
+};
+
+var obj1 = {
+  a: 2
+};
+
+var obj2 = {
+  a: 3
+};
+
+myMethod.bind(obj1)(); // 2
+myMethod.call(obj2); // 3
+```
+
+```js
+var myMethod = function () { 
+  console.log(this.a);
+};
+
+var obj1 = {
+  a: 2
+};
+
+var obj2 = {
+  a: 3
+};
+
+myMethod.bind(obj1);
+myMethod.call(obj2); 
+// 3
+// This is because we are hard binding but not executing so call getting fired
+```
+
+```js
+var myMethod = function () { 
+  console.log(this.a);
+};
+
+var obj1 = {
+  a: 2
+};
+
+var obj2 = {
+  a: 3
+};
+
+myMethod = myMethod.bind(obj1)();
+myMethod.call(obj2); 
+// 2
+// "error"
+// "TypeError: Cannot read property 'call' of undefined
+   // at gefebizuha.js:14:10
+   //  at https://static.jsbin.com/js/prod/runner-4.1.7.min.js:1:13924
+   // at https://static.jsbin.com/js/prod/runner-4.1.7.min.js:1:10866"
+
+
+// This is happening because once myMethod.bind(obj1)() is executed it will return undefined as we are not returning anything from the myMethod function and we are trying to call so, there is error
+```
+
+**new binding**
+
+```js
+function foo(a) {
+  this.a = a;
+}
+
+var bar = new foo( 2 );
+console.log( bar.a ); // 2
+```
+
+```js
+function foo(something) {
+  this.a = something;
+}
+
+var obj1 = {};
+
+var bar = foo.bind( obj1 );
+bar(2);
+
+var baz = new bar( 3 );
+console.log( obj1.a ); // 2
+console.log( baz.a ); // 3
+```
+
+**Object.defineProperty**
+
+It is used to create a property in an object
+
+```js
+ var account = {
+	cash: 120000,
+    withdraw: function(amount) {
+       this.cash -= amount;
+       console.log(this.cash);
+    }
+}
+Object.defineProperty(account, 'deposit', {
+  value: function(amount) {
+    this.cash += amount;
+    console.log(this.cash);
+  }
+})
+account.withdraw(1000);
+Object.defineProperty(account, 'name', {
+  value: '01'
+});
+console.log(account.name);
+account.name = '02';
+console.log(account.name);
+// 119000
+// "01"
+// "01"
+```
+
+This is because whenever a property is created using **defineProperty** it is **read-only**. To Change this use,
+
+**writable in defineProperty**
+
+```js
+ var account = {
+	cash: 120000,
+    withdraw: function(amount) {
+       this.cash -= amount;
+       console.log(this.cash);
+    }
+}
+Object.defineProperty(account, 'deposit', {
+  value: function(amount) {
+    this.cash += amount;
+    console.log(this.cash);
+  }
+})
+account.withdraw(1000);
+Object.defineProperty(account, 'name', {
+  value: '01',
+  writable: true
+});
+console.log(account.name);
+account.name = '02';
+console.log(account.name);
+// 119000
+// "01"
+// "02"
+```
+
+**enumerable in defineProperty**
+
+```js
+var person = {
+  name: 'Balaji',
+  age: 22,
+  id: '01'
+}
+for(var i in person) {
+  console.log(i);
+}
+// "name"
+// "age"
+// "id"
+```
+
+```js
+var account = {
+  name: 'Balaji',
+  age: 22
+};
+Object.defineProperty(account, 'id', {
+  value: '01'
+});
+for(var i in account) {
+  console.log(i);
+}
+// "name"
+// "age"
+```
+
+This is because when a property is created using **defineProperty**, then it will not appear in loop iterations, so we need use **enumerable**
+
+#### Example
+
+```js
+var account = {
+  name: 'Balaji',
+  age: 22
+};
+Object.defineProperty(account, 'id', {
+  value: '01',
+  enumerable: true
+});
+for(var i in account) {
+  console.log(i);
+}
+// "name"
+// "age"
+// "id"
+```
+
+**Getters and Setters**
+
+```js
+var account = {
+	 cash: 120000,
+    _name: 'Default',
+    withdraw: function(amount) {
+       this.cash -= amount;
+       console.log(this.cash);
+    }
+}
+Object.defineProperty(account, 'name', {
+  get: function () {
+    return this._name;
+  },
+  set: function(name) {
+   this._name = name;
+  }
+});
+console.log(account.name);
+account.name = 'Test';
+console.log(account.name);
+```
+
+* **account.name** will call **getter** 
+* **account.name = 'Test'** will call setter
+* **getter** will get the value from **_name**
+* **setter** will set the value to **_name**
+
+**configurable in defineProperty**
+
+This will allows the property from the object to be deleted
+
+* If **true**, the property can be deleted
+* If **false**, the property cannot be deleted
+
+**args of defineProperty**
+
+* value- the value added with the property
+
+* writable- default false-defines the over writting of property
+
+* configurable- default **false** - defines the **delete** property of the property - if **true** property can be **deleted**, if **false** cannot be **deleted**
+
+* set - set value
+
+* get - gets value
+
+* enumerable - defines whether the property should appear on iteration of object
+
+> The enumerable property attribute defines whether the property is picked by [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) or [spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)[ ](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)operator. For non-[Symbols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Symbols) properties it also defines whether it shows up in a [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) loop and [Object.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys) or not.
+
+**Delete Properties from Object**
+
+* Use **delete <property-name>**
+
+Used to delete property from Object
+
+#### Example
+
+```js
+var person = {
+  name: 'Balaji',
+  age: 22
+}
+console.log(person);
+delete person.name;
+console.log(person);
+console.log(person.name);
+// Object { name: 'Balaji', age: 22}
+// Object { age: 22 }
+// undefined
+```
+
+**To Find the property is exsisting or not**
+
+* Use **<property-name>** in **Object**
+
+#### Examples
+
+```js
+var person = {
+  name: 'Balaji',
+  age: 22
+}
+console.log('name' in person);
+// true
+```
+
+**For in loop and For of loop**
+
+**In Array**
+
+```js
+var a = [1, 2, 3, 4];
+for(var i in a) {
+   console.log(i);
+}
+
+for(var i of a) {
+  console.log(i)
+}
+// "0"
+// "1"
+// "2"
+// "3"
+// 1
+// 2
+// 3
+// 4
+```
+
+**In Object**
+
+```js
+var a = {
+  name: 'Balaji',
+  age: 22,
+  id: '01'
+}
+
+for(var i in a) {
+  console.log(i);
+}
+
+for(var i of a) {
+  console.log(i);
+}
+//"name"
+// "age"
+// "id"
+// "error"
+// "TypeError: a is not iterable
+   // at gefebizuha.js:13:80
+   // at https://static.jsbin.com/js/prod/runner-4.1.7.min.js:1:13924
+   // at https://static.jsbin.com/js/prod/runner-4.1.7.min.js:1:10866"
+```
+
+
 
 **Mixins in javascript**
 
@@ -1892,6 +2373,48 @@ myWillNotWorkExpectedlyArray.sort(() => firstNumber - secondNumber));
 myWillNotWorkExpectedlyArray.reverse(() => firstNumber - secondNumber)); 
 // output is [20, 10, 3, 1]
 ```
+
+**IIFE - Immediately invokded Functions**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
