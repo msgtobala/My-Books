@@ -6,7 +6,31 @@
 
 **How webpage works**
 
-![image-20191206012424504](https://github.com/msgtobala/My-Books/blob/master/images/how-browser-works.png)
+![alt image](https://raw.githubusercontent.com/msgtobala/My-Books/master/images/how-browser-works.png)
+
+### How JS is executed ?
+
+```flow
+st=>start: Code
+e=>end: Effect on Webpage
+op1=>operation: Javascript Engine(Chrome - V8, Firefox - Spider Monkey)
+
+st->op1->e
+```
+
+**How Javascript Engine is Exceuted?**
+
+```flow
+st=>start: Code
+e=>end: Effect on Webpage
+op1=>operation: Parsed(read, undertsood by browser)
+op2=>operation: Compiled to Machine code
+op3=>operation: Execute Machine code
+
+st->op1->op2->op3->e
+```
+
+Javascript Engine uses **machine code** because this faster. Also **Javascript** is **single-threaded**
 
 ## Versions of Javascript / What is ECMAScript
 
@@ -202,8 +226,15 @@ console.log(a); // undefined
 
 **Static Typing and Dynamic Typing**
 
-* If the error comes at run time it is **Dynamic typing**
+* If the error comes at run time it is **Dynamic typing** ( It is not pre-compiled and compiled on the fly )
+
+  > The code is evaluated at the run time
+
+  
+
 * If the error comes at the compile time it is **Static Typing**
+
+> The code is evaluated at the compile time  
 
 ```js
 var a = 1;
@@ -217,7 +248,12 @@ console.log(a); // balaji
 **Weakly Typed and Strongly Typed**
 
 * If the variable has strict data-type, then it is **Strongly typed**
+
+> The data-types must be informed before using it
+
 * If the variable does not have strict data-type, then it is **Weakly typed**
+
+> The data-types are decided automatically
 
 ```js
 console.log(4 * '7'); // 28 (js is weakly typed)
@@ -2160,7 +2196,43 @@ for(var i of a) {
    // at https://static.jsbin.com/js/prod/runner-4.1.7.min.js:1:10866"
 ```
 
+**Object.assign()**
 
+The **`Object.assign()`** method is used to copy the values of all enumerable own properties from one or more source objects to a target object. It will return the target object.
+
+```js
+const target = { a: 1, b: 2 };
+const source = { b: 4, c: 5 };
+
+const returnedTarget = Object.assign(target, source);
+
+console.log(target);
+// expected output: Object { a: 1, b: 4, c: 5 }
+
+console.log(returnedTarget);
+// expected output: Object { a: 1, b: 4, c: 5 }
+
+```
+
+**cloning object using Object.assign() immutably**
+
+```js
+var obj = { a: 1 };
+var copy = Object.assign({}, obj);
+console.log(copy); // { a: 1 }
+```
+
+This will not work for **deep clone**.Only use this for **shallow clone**
+
+**Deep Clone in js**
+
+```js
+var obj1 = { a: 0 , b: { c: 0 }};
+var obj3 = JSON.parse(JSON.stringify(obj1));
+obj1.a = 4;
+obj1.b.c = 4;
+console.log(JSON.stringify(obj3)); // { "a": 0, "b": { "c": 0}}
+```
 
 **Mixins in javascript**
 
