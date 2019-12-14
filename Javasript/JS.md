@@ -32,6 +32,10 @@ st->op1->op2->op3->e
 
 Javascript Engine uses **machine code** because this faster. Also **Javascript** is **single-threaded**
 
+### How JS Runs
+
+![HOW JS RUN](https://github.com/msgtobala/My-Books/blob/master/images/JS%20and%20Node%20JS.png?raw=true)
+
 ## Versions of Javascript / What is ECMAScript
 
 ECMAScript is a superset of Javascript which has all the standardization to be implemented. **Javascript** is a dialect of ES.
@@ -43,6 +47,10 @@ ECMAScript is a superset of Javascript which has all the standardization to be i
 > Polyfills - Used to support browsers for ES6 features as ES6 features are not supported in the browsers.
 >
 > We can use pre-processors also like **Babel**
+
+### Histor of JS
+
+
 
 ## Language Basics
 
