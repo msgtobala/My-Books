@@ -38,7 +38,7 @@ Javascript Engine uses **machine code** because this faster. Also **Javascript**
 
 ## Versions of Javascript / What is ECMAScript
 
-ECMAScript is a superset of Javascript which has all the standardization to be implemented. **Javascript** is a dialect of ES.
+**ECMAScript** is a superset of Javascript which has all the standardization to be implemented. **Javascript** is a dialect of ES.
 
 * Versions - ES5, ES6....
 
@@ -48,7 +48,21 @@ ECMAScript is a superset of Javascript which has all the standardization to be i
 >
 > We can use pre-processors also like **Babel**
 
-### Histor of JS
+### History of JS 
+
+![History of JS](https://github.com/msgtobala/My-Books/blob/master/images/History%20of%20JS.png?raw=true)
+
+### ECMASCRIPT AND JAVASCRIPT
+
+**ECMASCRIPT** is a standardization for JS. It has, 
+
+* Javascript
+* ActionScript
+* Jscript
+
+**ECMA** - European Computer Manufacturers Assosiation.
+
+> Each browser comes with its own engine. ECMAscript is not used directly.But the browsers use its implementation using JS. Also browsers are able to add their own features. Browsers are also supporting the development of ECMAscript.
 
 
 
@@ -58,7 +72,7 @@ ECMAScript is a superset of Javascript which has all the standardization to be i
 
 All the Javascript inside the script will be executed. Browser will start parsing the DOM from the top. So, if you include in the `<head>` , it will execute at the time of parsing only. But the DOM is not loaded yet. Therefore DOM objects cannot be accessed. So keep `<script>` imports at the bottom at the closing of `<body>` tag.
 
-Also, if you have long running javascript that is placed on the `<head>` that can block page rendering eventhough the page is small. Hence, the place always matters.  
+Also, if you have long running javascript that is placed on the `<head>` that can block page rendering eventhough the page is small. Hence, the place always matters.
 
 #### Sample
 
@@ -128,7 +142,7 @@ var floatVariable = 6.6;
 
 >Variables should not have reserved key word and should not start with number or special characters
 
-**typeOf** will give the data-type of variables
+**typeof** will give the data-type of variables
 
 ```js
 var a = 1;
@@ -1199,16 +1213,18 @@ var person = {
   greet: function() {
     console.log(this);
     console.log('Hello ' + this.name);
-    console.log(name);
+    console.log(age);
   }
 };
 person.greet();
-// person object, Hello balaji, age is not defined - error   
+// person object, 
+// Hello balaji
+// age is not defined - error   
 ```
 
 **this** in the object is pointing to the object not the global window object. **this** will be always pointing to the **caller**(here person obj)
 
->  Note: whenever a variable is created, it is attached to window object
+>  Note: whenever a variable is created(not in function), it is attached to window object
 
 * If the function is an arrow function in a object then, it will be always the **window object**
 
@@ -1225,7 +1241,7 @@ var person = {
   }
 };
 person.greet();
-// window object, Hello undefine
+// window object, Hello undefined
 ```
 
 In ES5 object always access the properties with the **this** keyword
@@ -1278,7 +1294,7 @@ obj.name = 'balaji';
 console.log(obj); // { name: 'balaji'}
 ```
 
-Object.create(null)  does inherit anything even Object.prototype
+Object.create(null)  does not inherit anything even **Object.prototype**
 
 ```js
 var obj = Object.create(null);
@@ -1292,7 +1308,7 @@ This will not have Object as fall back mechanism
 
 > All the object have a prototype. This is called as **default prototype** / **root prototype**. This will look like **Object.proptotype**
 
-> Note: All the objects have prototypes but those objects created with **Object.create(null)** will have the configuration as null so it will not have prototype
+> Note: All the objects have prototypes but those objects created with **Object.create(null)** will have the configuration as null so it will not have **prototype**
 
 **Inheritance using Object.create()**
 
@@ -1425,7 +1441,9 @@ person.name = 'balaji';
 console.log(person);
 console.log(person.__proto__ == Person.prototype);
 console.log(person.__proto__ == Object.prototype);
-// { name: 'balaji' }, true
+// { name: 'balaji' }
+// true
+// false
 ```
 
 ```js
@@ -1442,7 +1460,7 @@ person.greet();
 
 ```js
 function Person() {
-  this.name = 'default'
+  this.name = 'default';
 }
 Person.prototype.greet = function() {
   console.log('Hello ' + this.name);
@@ -1670,7 +1688,7 @@ var video = new Video('b');
 * In constructor function - **Instance / caller**
 * In Function which is in object - **Instance / caller**
 
-**Wiered this**
+**Wired this**
 
 ```js
 var video = {
@@ -2242,6 +2260,22 @@ obj1.b.c = 4;
 console.log(JSON.stringify(obj3)); // { "a": 0, "b": { "c": 0}}
 ```
 
+### 4) Debugging in JS
+
+* use **try catch**
+
+```js
+try { // executed on success
+  
+} catch(err) { // executed on fail
+
+} finally { // executed all the time even on success and failure
+  
+}
+```
+
+Usually **JS** errors break the code and stop execution. If use **try catch** this will allow JS to run without crahsing or stopping
+
 **Mixins in javascript**
 
 As defined in Wikipedia, a [mixin](https://en.wikipedia.org/wiki/Mixin) is a class containing methods that can be used by other classes without a need to inherit from it. This is used to achieve multiple inheritance in js
@@ -2365,10 +2399,10 @@ menu.on("select", value => alert(`Value selected: ${value}`));
 
 // triggers the event => the handler above runs and shows:
 // Value selected: 123
-menu.choose("123");
+menu.choose("123"); 
 ```
 
- **Sorting in JS**
+**Sorting in JS**
 
 ```js
 var a = [1, 3, 5, 4, 2];
