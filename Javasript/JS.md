@@ -3432,12 +3432,21 @@ try { // executed on success
 
 Usually **JS** errors break the code and stop execution. If use **try catch** this will allow JS to run without crahsing or stopping
 
-### 5) DOM IN JS
+### 5) window and DOM IN JS
 
 * window - The whole browser tab
 * document - The rendered/visible HTML
 
 DOM - DOCUMENT OBJECT MODEL
+
+This Model is created by the browser when it is rendered. It looks like graph.
+
+**Interactiong with the DOM**
+
+* Change / add / remove HTML elements
+* change / add / removes **css** of the elements
+* Read / change attributes of the element
+* Attach / remove event listeners 
 
 **Global scope** - window Object
 
@@ -3515,6 +3524,74 @@ parentElement; // gives the parent element of the child
 .querySelectorAll(<TagName / className / ID / attribute>); // returns a node list with the matching tag name, class name, id
 ```
 
+**Difference Between Nodelist and HTMLCollection**
+
+* NodeList - NodeList can contain any node type
+  * It is not an Array.We can use **arr.forEach()**. To Convert into array use **Array.from()**
+
+* HTMLCollection - HTMLCollection can contain only the element node. An `HTMLCollection` provides the same methods as a `NodeList` and additionally a method called `namedItem`.
+  * It is not an Array.We cannot use **arr.forEach()**. To convert into array use **Array.from()**
+
+**namedItem in HTMLCollection**
+
+* It is same like `document.getElementById`.
+
+#### Example
+
+```html
+<!DOCTYPE html>
+<html>
+	<body>
+    <h1>HTMLCollection namedItem() Method</h1>
+    <p id="myElement">
+      The namedItem() method returns the element with the specified ID or name.
+    </p>
+    <p>Click the button to return the content of the P element with ID "myElement":</p>
+    <button onclick="myFunction()">Alert innerHTML of P</button>
+    <script>
+      function myFunction() {
+        var x = document.getElementsByTagName("P").namedItem("myElement");
+        console.log(x.innerHTML);
+      }
+		</script>
+	</body>
+</html>
+
+```
+
+**Types of Nodes**
+
+1. element node
+2. attribute node
+3. text node
+4. comment node
+
+**To identify the node type**
+
+```js
+elem.nodeType; // it will return 1 to 12
+```
+
+**To identify the node name**
+
+```js
+elem.nodeName; // will return node name
+```
+
+**To identify if the node has child**
+
+```js
+elem.hasChildNodes(); // returns true or false
+```
+
+**To clone a node**
+
+```js
+var clonedNode = elem.cloneNode(true);
+// true  - deep clone
+// false - shallow clone
+```
+
 **Create Element**
 
 ```js
@@ -3539,6 +3616,21 @@ deleteElement.parentElement.removeChild(deleteElement);
 var deleteElement = document.querySelectorAll(a);
 deleteElement.remove();
 ```
+
+```js
+element.classList.add - adds the new class into the existing classes
+NOTE: THIS CAN BE DONE WITH THE HELP OF element.className += 'newClass'    
+element.getAttribute('[attribute_value_you_need]') - this will give the attribute name 
+element.setAttribute('[attribute]', value) - This will overwrites the attribute of the element 
+element.hasAttribute('[attribute name]') - This will check for the element with  attribute to be checked for exsistance
+element.removeAttribute("[attribute_to_be_removed"]) - This will remove the specified attribute from the element
+DOMContentLoaded - will be executed after the content has been loaded
+```
+
+**Changing the Text and HTML elements**
+
+* .textContent - gives only the text
+* .innerHTML  - gives the HTML
 
 **Misc**
 
@@ -3669,7 +3761,7 @@ function listener(event){
 <html>
   <body>
     <div id='outer' style='width: 100px;height: 100px; background-color: green'>
-      <div id='inner' style='width: 100px;height: 100px; background-color: yellow'></div>
+      <div id='inner' style='width: 50px;height: 50px; background-color: yellow'></div>
     </div>
   </body>
 </html>
@@ -3693,7 +3785,7 @@ function outerListener() {
 // when the green div is clicked 'outer' will be printed
 ```
 
-* This is called as **Bubbling**. To Stop this bubbling
+* This is called as **Bubbling**. By, default Javascript events propagates.To Stop this bubbling
 
 ```js
 var inner = document.getElementById('inner');
@@ -3702,7 +3794,7 @@ var outer = document.getElementById('outer');
 inner.addEventListener('click', innerListener);
 outer.addEventListener('click', outerListener);
 
-function innerListener() {
+function innerListener(event) {
   event.stopPropagation();
   console.log('inner');
 }
@@ -3714,7 +3806,182 @@ function outerListener() {
 // when the green div is clicked 'outer' will be printed 
 ```
 
+To Know whether the **event bubbling or not**,
 
+```js
+var inner = document.getElementById('inner');
+var outer = document.getElementById('outer');
+
+inner.addEventListener('click', innerListener);
+outer.addEventListener('click', outerListener);
+
+function innerListener(event) {
+  console.log(event.bubbles); // true(since it has propagation)
+  event.stopPropagation();
+  console.log('inner');
+}
+
+function outerListener() {
+  console.log('outer');
+}
+// when the yellow div is clicked both 'inner and outer' will be printed(child => parent)
+// when the green div is clicked 'outer' will be printed 
+```
+
+**event.target**
+
+**event.target** will holds the object information of where the event happened
+
+```js
+var inner = document.getElementById('inner');
+var outer = document.getElementById('outer');
+
+inner.addEventListener('click', innerListener);
+outer.addEventListener('click', outerListener);
+
+function innerListener(event) {
+  console.log(event.target); // has an object of the triggered element
+  console.log('inner');
+}
+
+function outerListener() {
+  console.log('outer');
+}
+// when the yellow div is clicked both 'inner and outer' will be printed(child => parent)
+// when the green div is clicked 'outer' will be printed 
+```
+
+**To know where the event has happened**
+
+```js
+var inner = document.getElementById('inner');
+var outer = document.getElementById('outer');
+
+inner.addEventListener('click', innerListener);
+outer.addEventListener('click', outerListener);
+
+function innerListener(event) {
+  console.log(event.clientX, event.clientY);
+  console.log('inner');
+}
+
+function outerListener() {
+  console.log('outer');
+}
+// when the yellow div is clicked both 'inner and outer' will be printed(child => parent)
+// when the green div is clicked 'outer' will be printed 
+```
+
+**Bubbling** -  Triggered from child and then parent
+
+**Capturing** - Triggered from parent and then to child
+
+**To control bubbling and capturing**
+
+```js
+elem.addEventListener('click', fn, false); // third args is false
+ele.addEventListener('click', fn, true); // third args is true
+// if false - bubbling will happen
+// if true - capturing will happen
+```
+
+**Event Capturing**
+
+```html
+<html>
+  <body>
+    <div id='outer' style='width: 100px;height: 100px; background-color: green'>
+      <div id='inner' style='width: 50px;height: 50px; background-color: yellow'></div>
+    </div>
+  </body>
+</html>
+```
+
+```js
+var inner = document.getElementById('inner');
+var outer = document.getElementById('outer');
+
+inner.addEventListener('click', innerListener);
+outer.addEventListener('click', outerListener, true); // capturing
+
+function innerListener(event) {
+  console.log('inner');
+}
+
+function outerListener() {
+  console.log('outer');
+}
+// outer
+// inner
+```
+
+**To Stop Capturing**
+
+```js
+var inner = document.getElementById('inner');
+var outer = document.getElementById('outer');
+
+inner.addEventListener('click', innerListener, true);
+outer.addEventListener('click', outerListener, true); // capturing
+
+function innerListener(event) {
+  console.log('inner');
+}
+
+function outerListener() {
+  event.stopPropagation();
+  console.log('outer');
+}
+// outer
+```
+
+### 7) AJAX - Asynchronous Javascript and XML
+
+This is inbuilt in JS to make **ajax calls** with refreshing the page. 
+
+#### GET
+
+```js
+var http = new XMLHttpRequest();
+var url = 'https://jsonplaceholder.typicode.com/posts';
+var method = 'GET';
+
+http.open(method, url);
+http.onreadystatechange = function() {
+  if(http.readyState === XMLHttpRequest.DONE && http.status === 200) {
+     console.log(JSON.parse(http.responseText));
+  } else {
+    console.log('error');
+  }
+}
+http.send();
+```
+
+#### POST
+
+```js
+var http = new XMLHttpRequest();
+var url = 'https://jsonplaceholder.typicode.com/posts';
+var method = 'POST';
+var data = 'title=test'
+
+http.open(method, url);
+http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+http.onreadystatechange = function() {
+  if(http.readyState === XMLHttpRequest.DONE && http.status === 201) {
+     console.log(JSON.parse(http.responseText));
+  } else {
+    console.log('error');
+  }
+}
+http.send(data);
+```
+
+### 8) Libraries and Frameworks
+
+* Library - JQuery
+* Framework - React(not exactly a framework) , Angular
+* Bundlers - Webpack, system JS, jspm.io
 
 **Mixins in javascript**
 
