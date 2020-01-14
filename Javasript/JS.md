@@ -3513,6 +3513,21 @@ previousElementSibiling; // gives the previous sibiling of the current child
 parentElement; // gives the parent element of the child 
 ```
 
+```js
+parentNode; // gives the parent node of the child (same as parentElement)
+.childNodes; // gives the children includes all type of node
+.children; // gives only the required element nodes
+```
+
+**Siblings**
+
+```js
+nextSibling; // gives the next node includes all types of node
+nextElementSibling; // gives the required next element sibling
+previousSibling; // gives the previous Sibling including all kinds of nodes
+previousElementSibling; // gives the required element sibling 
+```
+
 **Accessing the DOM elements**
 
 ```js
@@ -3559,12 +3574,17 @@ parentElement; // gives the parent element of the child
 
 ```
 
+**Nodes**
+
+* Every thing in the HTML is a node.
+
 **Types of Nodes**
 
 1. element node
 2. attribute node
 3. text node
 4. comment node
+5. document node and etc.,
 
 **To identify the node type**
 
@@ -3588,8 +3608,8 @@ elem.hasChildNodes(); // returns true or false
 
 ```js
 var clonedNode = elem.cloneNode(true);
-// true  - deep clone
-// false - shallow clone
+// true  - deep clone - clones the inner children also
+// false - shallow clone - wil not clones the inner children
 ```
 
 **Create Element**
@@ -3827,6 +3847,61 @@ function outerListener() {
 // when the yellow div is clicked both 'inner and outer' will be printed(child => parent)
 // when the green div is clicked 'outer' will be printed 
 ```
+
+**Advantages of Event Bubbling**
+
+#### Scenario
+
+Delete a book from the list when the delete button is clicked
+
+#### Typical Solution
+
+* Grab all the delete buttons
+* Add event listeners (click)
+* Delete the list using `removeChild`
+
+*** This is in-efficient, since when the new element is added, we need to attach the event listeners for the new element also else it will not work 
+
+#### Best Solution
+
+* Attach the event listeners to the parent (`ul` in this case).
+* Listen for the event whenever the ul is clicked but restrict only for button using event.target
+* Perform delete 
+
+#### Example
+
+```HTML
+<ul>
+  <li>
+  	<p>Book 1</p>
+    <button class='delete'>Delete</button>
+  </li>
+  <li>
+  	<p>Book 2</p>
+    <button class='delete'>Delete</button>
+  </li>
+  <li>
+  	<p>Book 3</p>
+    <button class='delete'>Delete</button>
+  </li>
+  <li>
+  	<p>Book 4</p>
+    <button class='delete'>Delete</button>
+  </li>
+</ul>
+```
+
+```js
+var lis = document.querySelector('ul');
+lis.addEventListener('click', function(e) {
+  if(e.target.className === 'delete') {
+     let li = e.target.parentElement;
+     li.parentNode.removeChild(li);
+  }
+});
+```
+
+
 
 **event.target**
 
