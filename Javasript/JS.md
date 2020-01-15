@@ -3866,7 +3866,7 @@ Delete a book from the list when the delete button is clicked
 
 * Attach the event listeners to the parent (`ul` in this case).
 * Listen for the event whenever the ul is clicked but restrict only for button using event.target
-* Perform delete 
+* Perform delete.
 
 #### Example
 
@@ -3900,8 +3900,6 @@ lis.addEventListener('click', function(e) {
   }
 });
 ```
-
-
 
 **event.target**
 
@@ -4008,6 +4006,69 @@ function outerListener() {
   console.log('outer');
 }
 // outer
+```
+
+**DOM AND FORMS**
+
+```js
+document.forms; // returns HTMLCollection of forms
+var forms = document.forms;
+console.log(forms[0]); // gives the form at the index 0
+console.log(forms['user-form']); // gives the form with the id 'user-form'
+```
+
+**Adding and removing classes**
+
+```js
+elem.className = 'test';
+console.log(elem.className);
+```
+
+**Adding Multiple classes**
+
+```js
+elem.className = 'test';
+elem.className += ' test1';
+console.log(elem.className); // 'test test1'
+```
+
+```js
+elem.classList.add('test');
+elem.classList.add('test1');
+console.log(elem.classList); // ['test', 'test1']
+```
+
+**Removing classes**
+
+```js
+elem.classList.remove('test'); // removes the class
+```
+
+**changing attributes**
+
+```js
+elem.getAttribute('class'); // gives the attribute value
+elem.setAttribute('class', 'test'); // set the class attribute with the test value 
+```
+
+**To check the attribute**
+
+```js
+elem.hasAttribute('class'); // returns true or false
+```
+
+**Removing Attributes**
+
+```js
+elem.removeAttribute('class'); // removes the attribute from the element
+```
+
+**DOMContentLoaded event**
+
+```js
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM is loaded');
+});
 ```
 
 ### 7) AJAX - Asynchronous Javascript and XML
