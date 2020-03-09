@@ -191,7 +191,7 @@ export default App;
 
 #### useEffect()
 
-**useEffect** will be called always whenever the component **renders**. This will be called for all setStates.
+**useEffect** will be called always whenever the component **renders**. This will also be called for all setStates.
 
 ```react
 import React, { useState, useEffect } from 'react';
@@ -273,6 +273,41 @@ export default App;
 ```
 
 > THIS ALLOWS SHALLOW CHECKING
+
+**useEffect**
+
+```react
+import React, { useState, useEffect } from 'react';
+
+function App() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // This will render always
+  useEffect(() => {
+    console.log('render');
+  });
+
+  return (
+    <div>
+      <input
+        type="email"
+        name="email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        name="password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+      />
+    </div>
+  );
+}
+
+export default App;
+```
 
 **componentDidMount with useEffect**
 
