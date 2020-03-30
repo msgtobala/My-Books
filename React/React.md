@@ -16,7 +16,7 @@ In Html,
 
 In Js,
 
-```js
+```jsx
 function Person (props) {
     return (
         <div>
@@ -27,14 +27,25 @@ function Person (props) {
 }
  
 const app = (
-    <person name = "balaji" age = 12/>
+  <div>
+  	<person name = "balaji" age = 12/>
     <person name = "venkatraman" age = "21"/>
+  </div>
 );
  
-ReactDom.render(app,document.getElementById('app'));
+ReactDom.render(app,document.getElementById('app')); or
+ReactDOM.render(elem, <the_place_to_render>);
 ```
 
 ---
+
+**Single Page Application**
+
+Has only one HTML file and that loaded at the first time and on each load the rendering is taken care by react.The whole page is controlled by react.And all the components are react based.Only one React.DOM call for the whole components 
+
+**Multi Page Application**
+
+Multiple html files on each page switch.And the switching is handled by the server.Some of the components can be react based.One React.DOM call per widget
 
 # Brush Up
 

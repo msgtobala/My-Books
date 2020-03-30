@@ -516,6 +516,172 @@ CupertinoPageScaffold(); // ios
 
 > import **package:flutter/cupertino.dart** for using **cupertino** widgets
 
+**cupertinoAppBar**
+
+```dart
+CupertinoNavigationBar(
+  middle: Text('Personal Expenses'), // as title in material app bar
+  trailing: Row( // as actions in material app bar
+    mainAxisSize: MainAxisSize.min, // since row will take inf width, it is to give the width 
+    children: <Widget>[             // as it needs
+      GestureDetector(              // since we dont have IconButton we need to create it
+        child: Icon(CupertinoIcons.add),
+        onTap: () => _initiateAddNewTransaction(context),
+      )
+    ],
+  ),
+);
+```
+
+**mainAxisSize**
+
+This is used because **Row/Column** by default will have infinite width / height. To restrict as much the children needs use `mainAxisSize: MainAxisSize.min` by default it will be `mainAxisSize: MainAxisSize.max`
+
+```dart
+mainAxisSize: MainAxisSize.min, 
+```
+
+**To overcome the reserved spaces for Notch, default bottom navigation control**
+
+```dart
+SafeArea(child: Widget(),);
+```
+
+**To acheive IOS routing and to use theme for IOS**
+
+Since to achieve routing behavior of IOS and to have theme data use **CupertinoApp and CupertinoThemeData**
+
+```dart
+CupertinoApp(
+  title: 'Personal Expenses',
+  debugShowCheckedModeBanner: false,
+  theme: CupertinoThemeData(
+    primaryColor: Colors.purple,
+  ),
+  home: MyHomePage(),
+)
+```
+
+But the downside is that we cannot acheive all the theme features.So use `Theme.of(context)`.
+
+#### Performance and Flutter core basics
+
+**Flutter** gives 60fps application which means it updates the screen with 60 times per second. On first paint it will venture through all the widgets and get all information like **position, data, text, context, theme** etc., On later paints, if nothing changes it will use the old information stored. So it will be fast.
+
+**What build method is?**
+
+##### Types of trees
+
+* Widget Tree - Controlled by code - frequently rebuilt
+* Element Tree - controlled by flutter - internaly depends on **widget tree** - not frequently rebuilt
+* Render Tree - controlled by flutter -  internaly depends on **widget tree** - final output - not frequently rebuilt
+
+**Widget Tree**
+
+It is only the configuration of the widgtes.It will be re-rendered frequently .It is controlled by the code.It is a bunch of configuration
+
+**Element Tree**
+
+It is internally handled by flutter. It depends on widget tree and it is not freq rebuilt. Flutter always create **element** when it encouters the widget for the first time. **Element** is an object managed in memory which has the reference to widget.For stateful widgets **Element** creates an object for reference and a state object(**independent object**). It also has a reference on the **rendered box( the rendered object on the screen )**. Each **Element** has reference to **widget tree** and **rendered tree**. The rendered box / the render Object which are rendred in the screen can be seen on dart devtools
+
+When **setState** called it will call re-rendering. Whenever the rebuild is happening, it will create a new widget tree with new instances of **Widget classes**.
+
+> Widget and widget trees are immutable. only setState can do it. But this will create new widget and new instance as mentioned below
+
+Also, whenever there is change in `of(context)` changes there is re-rendering will happen.
+
+**Things that cause re-rendering**
+
+* setState()
+* of(context) - `MediaQuery.of(context)` and `Theme.of(context) and Navigator.of(context)`
+
+**How re-builds and repaints are happening**
+
+**Build of parent** causes **build of children** also happens.
+
+**Improving Performance**
+
+* const constructors
+* const widgets
+
+**Usage**
+
+* All stateless widgets are **immutable**, hence we can use const constructor
+* Use **const** for static widgets / classes
+* Uses **const** for paddings, margins
+
+**Lifecycles in Flutter**
+
+##### Stateful widgets
+
+* constructor
+* initState
+* build
+
+##### Statless widgets
+
+* constructor
+* initState - runs once not on every rebuilt - used to make http request - no setState in initState
+* build - essential method
+* didUpdateWidget - called after setState is called / when the widget is updated - used to make http calls
+* dispose - called when the widget unmount
+
+###### App Lifecycle
+
+* inactive
+* paused
+* resumed
+* suspending - about to be closed
+
+#### Implementation
+
+```dart
+class _NewTransactionState extends State<NewTransaction>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  
+  ....code
+}
+```
+
+#### context
+
+**context** - meta information about the widget and the location of the widget. It gives communication channel between other widgets
+
+#### Inherited widgets
+
+**MediaQuery, Theme** uses inherited widget. InheritedWidget will create a tunnel for communication and interaction with passing the data around / exchanging the data.
+
+#### key in flutter
+
+Every widget can have a key but not stateless widget
+
+* UniqueKey - system generated
+* ValueKey - user generated
+
+**Random**
+
+```dart
+import 'dart:math';
+
+print(Random().nextInt(4)); will generate a random integer btwn 0 - 4
+```
+
 
 
 **Route**
