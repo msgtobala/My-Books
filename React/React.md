@@ -33,7 +33,7 @@ const app = (
   </div>
 );
  
-ReactDom.render(app,document.getElementById('app')); or
+ReactDOM.render(app,document.getElementById('app')); or
 ReactDOM.render(elem, <the_place_to_render>);
 ```
 
@@ -139,6 +139,8 @@ const style = {
  }
 ```
 
+You will need ``App`` to be wrapped by ``<StyleRoot>`` to enable media queries
+
 ###### media-queries
 
 ```react
@@ -156,7 +158,7 @@ const style = {
   **In new react eject**,
 
 ```react
- web.config.js -->  modules: true,
+ webpack.config.js -->  modules: true,
  localIdentName: '[name]__[local]__[hash:base64:5]' // in line no.  498
 ```
 
@@ -248,15 +250,14 @@ The **Key** prop should be,
 
  ### Creation Phase
 
-| Phase                                                        | Description                                                  |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| constructor(props)                                           | **Instialized on component creation**.Dont reach out to web , No AJAX call. always Use super(props) |
-| componentWillmount()  now **static getDerivedStateFromProps(nextProps, prevState)** | **Not used mostly, but there for historic reasons**          |
-| render()                                                     | **Prepares JSX rendering code**                              |
-| Render child components                                      | **Renders children components**                              |
-| componentDidmount()                                          | **Executed after all the components are mounted**. Reach out to the web, AJAX,Dont Update the state, causes **Re-rendering** |
-
-​                          
+| Phase                                                     | Description                                                  |
+| --------------------------------------------------------- | ------------------------------------------------------------ |
+| constructor(props)                                        | **Instialized on component creation**.Dont reach out to web , No AJAX call. always Use super(props).not cause side effects |
+| **static getDerivedStateFromProps(nextProps, prevState)** | syncing state(rarely used). When the props of a component change and then the internal state of component to be updated use this lifecycle.Dont cause Side effetcts |
+| render()                                                  | **Prepares JSX rendering code**                              |
+| Render child components                                   | **Renders children components**                              |
+| componentDidmount()                                       | **Executed after all the components are mounted**. Reach out to the web, AJAX,Dont Update the state, causes **Re-rendering** |
+| componentWillUnmount()                                    | executes when the component is unmounted                     |
 
 ### Update Phase
 
@@ -264,21 +265,22 @@ The **Key** prop should be,
 
 | Phase                                                        | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| componentWillReceiveProps(nextProps) now **static getDerivedStateFromProps(nextProps, prevState)** | **Used for sync in state**. Dont Reach out to web            |
+| componentWillReceiveProps(nextProps) (deprecated) now **static getDerivedStateFromProps(props, state)** | **Used for sync in state**. Dont Reach out to web.Dont cause side effects |
 | shouldComponentUpdate(nextProps, nextState)                  | return true or false. Update - true,Not update - false(updated but not reflected in DOM). return true when **nextProps.XY !== this.props.XY && nextState.XY !== nextState.XY** |
-| componentWillUpdate(nextProps, nextState)                    | **Used for sync in state**                                   |
-| render(), rendering children                                 | **Prepares JSX rendering code**                              |
-| getSnapshotBeforeUpdate(nextProps, nextState)                | returns the snapshot                                         |
-| componentDidUpdate(prevProps, prevState, snapshot)           | **Executed after all the updated components are updated**. Can Reach out to web. Dont update state, Causes **re-rendering** |
+| componentWillUpdate(nextProps, nextState) (deprecated)       | **Used for sync in state**                                   |
+| render(), rendering and updating  children                   | **Prepares JSX rendering code**                              |
+| getSnapshotBeforeUpdate(prevProps, prevState)                | returns the snapshot. Last minute DOM operations.. Like getting the DOM snap before update Ex: Scroll position |
+| componentDidUpdate(prevProps, prevState, snapshot)           | **Executed after all the updated components are updated**. Can Reach out to web. Dont update state, Causes **re-rendering**. might cause infinte loops when updating state. |
 
 ###### Triggred when change in state
 
-| Phase                                        |
-| -------------------------------------------- |
-| shouldComponentUpdate (nextProps, nextState) |
-| componentWillUpdate()                        |
-| render(), rendering child components         |
-| componentDidUpdate()                         |
+| Phase                                             |
+| ------------------------------------------------- |
+| **static getDerivedStateFromProps(props, state)** |
+| shouldComponentUpdate (nextProps, nextState)      |
+| componentWillUpdate() (deprecated)                |
+| render(), rendering child components              |
+| componentDidUpdate()                              |
 
 ### De-mounting Phase
 
@@ -476,7 +478,7 @@ this.setState((state, props) => {
 
 A function **without side effects** is called as pure function.Functional setState is the preferred way to call setState because it’s guaranteed to work correctly, everytime. Try to use it whenever you can.
 
-* **Props** are read-only, state are read. 
+* **Props** are read-only. 
 
 #### Prop-types
 
@@ -724,9 +726,9 @@ this.setState({
 
 ## Events
 
-> The events is javascript are called as Synthetic events. Each events has **events object** created. By default react events are pooled which means that the event object are not created each time , react replaces only the values of previous **event object**
+> The events in javascript are called as Synthetic events. Each events has **events object** created. By default react events are pooled which means that the event object are not created each time , react replaces only the values of previous **event object**
 
->The event object passed to a handler function is only valid right at that moment. The SyntheticEvent
+>The event object passed to a handler function is only valid right at that moment. The **SyntheticEvent**
 >object is pooled for performance. Instead of creating a new one for every event, React replaces the
 >contents of the one single instance. The event objects are nullified by react. There are pooled by react by default.
 
@@ -744,7 +746,7 @@ function onClick(event) {
   // Won't work. this.state.clickEvent will only contain null values.
   this.setState({clickEvent: event});
 
-  // You can still export event properties.
+  // You can still use event properties.
   this.setState({eventType: event.type});
 }
 ```
@@ -828,6 +830,133 @@ connect the ref variable in input like,
 `ref = {this.inputElemenet}`
 
 `this.inputElement.focus`
+
+### Another way
+
+```react
+constructor(props) {
+  super(props);
+  this.elemRef = React.createRef();
+}
+
+componentDidMount() {
+	this.elemRef.current.focus();  
+}
+
+render() {
+  return (
+    <input ref={this.elemRef} />
+   );
+}
+```
+
+### Proptypes chain problem
+
+Comp ---**props**---> child 1 --**props**--> child2 --**props**--> child3 --**props**--> childN
+
+A childN needs a props from a parenr **comp**. To pass the to childN, we need to pass to **child1** and to **child2** and **child3** and to **childN**. So we need to keep a track of props. This will be painful at sometime.So react offers **context API**
+
+#### Context API
+
+* Create a context file
+
+```react
+// context/context.js
+
+import React from 'react';
+
+const authContext = React.createContext({
+  authenticated: false,
+  login: () => {}
+});
+```
+
+* Import context and wrap it part of the app where we need the access to the context 
+
+```react
+// App.js
+import React from 'react';
+
+import AuthContext from './context';
+
+class App extends Component {
+  state ={
+    authenticated: false,
+  }
+
+  loginHandler = () => {
+    this.setState((prevState, props) => {
+      return {
+        authenticated: !prevState.authenticated
+      }
+    });
+  }
+  render () {
+    return (
+       <div>
+      	  <Person />
+             <AuthContext.Provider value={{
+               authenticated: this.state.authenticated,
+               login: this.loginHandler
+             }}>
+        					<Login />
+             </AuthContext.Provider>
+          <Testing />
+       </div>
+    );
+  }
+}
+```
+
+* Configure Consumer
+
+```react
+ // Login.js
+
+import React from 'react';
+
+import AuthContext from './context/context.js';
+
+const Login = (props) => {
+  return (
+  	<AuthContext.consumer>
+    	{(context) => {
+        return (
+          <p>{context.authenticated}</p>
+          <button onClick={context.login}>Click to login</button>
+        );
+      }}
+    </AuthContext.consumer>
+  );
+}
+```
+
+Using context API makes the less props to passed and avoids **props propagation chain problem**. Also these context data can accessed only inside of consumer `<context.Consumer>` and we cannot use context data inside the lifecycle methods
+
+ To access the context data use,(Another alternative way) works @**16.6**
+
+```jsx
+import 'React' from 'react';
+
+import AuthContext from './context/context';
+
+class App extends Component {
+  
+  static contextType = AuthContext;
+
+  componentDidMount() {
+    console.log(this.context.authenticated);
+  }
+  render() {
+    return (
+          <p>{this.context.authenticated}</p>
+          <button onClick={this.context.login}>Click to login</button>
+    );
+  }
+}
+```
+
+This is possible only with **class based components**. So, for functional based components we need use **useContext**
 
 ----
 

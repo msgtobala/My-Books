@@ -448,3 +448,60 @@ export const useFetch = url => {
 
 ```
 
+#### useRef()
+
+* Alternative of `React.createRef()` in functional based components
+
+```react
+import React, { useRef, useEffect } from 'react'
+
+const cockpit = (props) => {
+  const toggleRef = useRef(null);
+  
+  useEffect(() => {
+    toggleRef.current.click();
+  }, []);
+  
+  return (
+   <button ref={toggleRef} >click</button>
+  );
+}
+```
+
+####  useContext()
+
+* This is an alternative for **static contextType** in class based components
+
+```react
+import React from 'react';
+
+import AuthContext from './context/context';
+
+const Login = (props) => {
+  const authContext = useContext(AuthContext);
+  console.log(authContext);
+  return (
+  	<p>{authContext.authenticated}</p>
+    <button onClick={authContext.login}>click</button>
+  );
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
