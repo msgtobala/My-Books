@@ -958,6 +958,33 @@ class App extends Component {
 
 This is possible only with **class based components**. So, for functional based components we need use **useContext**
 
+### Default Prop Values
+
+You can define default values for your `props` by assigning to the special `defaultProps` property:
+
+```react
+class Greeting extends React.Component {
+  render() {
+    return (
+      <h1>Hello, {this.props.name}</h1>
+    );
+  }
+}
+
+// Specifies the default values for props:
+Greeting.defaultProps = {
+  name: 'Stranger'
+};
+
+// Renders "Hello, Stranger":
+ReactDOM.render(
+  <Greeting />,
+  document.getElementById('example')
+);
+```
+
+The `defaultProps` will be used to ensure that `this.props.name` will have a value if it was not specified by the parent component. The `propTypes` typechecking happens after `defaultProps` are resolved, so typechecking will also apply to the `defaultProps`.
+
 ----
 
  ### **Burger Builder**

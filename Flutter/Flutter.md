@@ -891,3 +891,150 @@ if, size: 60,
 then, size: (height / _blockWidth) * SizeConfig.widthMultiplier;
 ```
 
+#### State Management
+
+##### Installation
+
+```dart
+provider: ^3.0.0
+```
+
+##### Usage
+
+* Create a provider file for data container
+
+  ```dart
+  import 'package:flutter/material.dart';
+  
+  import '../models/product_model.dart';
+  
+  class ProductsProvider with ChangeNotifier {
+    List<ProductModel> _items = [];
+  
+    List<ProductModel> get items {
+      return [..._items]; 
+    }
+  
+    void addProduct() {
+      // _items.add(value);
+      notifyListeners();
+    }
+  }
+  ```
+
+  Use **ChangeNotifier** as mixin for the provider class, use **notifyListeners()** for triggering update signal
+
+  *  Use the provider for providing data. 
+
+    > Always use the provider on the parent class of the class where we need to use provider
+
+  * Enable the provider in the parent component using ChangeNotifierProvider
+
+    ```dart
+    class MyApp extends StatelessWidget {
+      @override
+      Widget build(BuildContext context) {
+        return ChangeNotifierProvider(
+          create: (ctx) => ProductsProvider(),
+          child: MaterialApp(
+            title: 'Shop',
+            theme: ThemeData(
+                primarySwatch: Colors.purple,
+                accentColor: Colors.deepOrange,
+                fontFamily: 'Lato'),
+            home: ProductsOverviewScreen(),
+            debugShowCheckedModeBanner: false,
+            routes: RoutingTable.getRoutingTable(context),
+          ),
+        );
+      }
+    }
+    ```
+
+    * Use the Provider to enable the connection in the to be used component
+
+      ```dart
+      final productsData = Provider.of<ProductsProvider>(context);
+      ```
+
+      
+
+#### Mixins and inheritance
+
+##### Inheritance
+
+```dart
+class Mammal {
+  void breathe() {
+    print('Breathe in and breath out');
+  }
+}
+
+class Human extends {
+  String name;
+  int age;
+  
+  Human(this.name, this.age);
+}
+
+void main() {
+  final prs = Person('balaji', 22);
+  print(prs.name);
+  prs.breathe();
+}
+```
+
+Inheritance(strong connection) means inheriting the properties and method of a parent class from a child class    
+
+##### Mixins
+
+```dart
+mixin Agility {
+  var speed = 10;
+  void sitDown() {
+    print('Sitting down....');
+  }
+}
+
+class Mammal {
+  void breathe() {
+    print('Breathe in and breath out');
+  }
+}
+
+class Human extends Mammal with Agility {
+  String name;
+  int age;
+  
+  Human(this.name, this.age);
+}
+
+void main() {
+  final prs = Person('balaji', 22);
+  print(prs.name);
+  prs.breathe();
+  print(prs.speed);
+  print(prs.sitDown );
+}
+```
+
+Mixin means sharing or adding properties / methods. It also means the addition of utility methods
+
+* Able to extend only one inheritance at a time
+* Able to mixin any number of mixins
+
+##### Alternative ways of using Provider
+
+```dart
+child: ChangeNotifierProvider(
+		value: Products(),
+    child: Item(),
+);
+```
+
+Using **ChangeNotifierProvider.value()**, is right way and suggestible way. Because this is the right way of using provider on list and grids.
+
+#### Cleaning data in Provider
+
+   when a page that uses data from the ChangeNotifierProvider is navigated / pushNamed, then the data used by the page is cleaned up automatically by ChangeNotofierProvider to prevent memory leaks.
+
