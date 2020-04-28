@@ -58,6 +58,8 @@ Flutter is open source project.Keeps on updating and becoming more more stable.
 * configure a Android virtual device
 * Setup android simulator
 
+> For sdk manager error, go to site https://androidsdkmanager.azurewebsites.net/SDKTools
+
 #### In Windows,
 
 * Download [Flutter SDK](https://flutter.dev/docs/get-started/install/windows)
@@ -682,8 +684,6 @@ import 'dart:math';
 print(Random().nextInt(4)); will generate a random integer btwn 0 - 4
 ```
 
-
-
 **Route**
 
 ```dart
@@ -901,7 +901,7 @@ provider: ^3.0.0
 
 ##### Usage
 
-* Create a provider file for data container
+* Create a provider file for data container(ChangeNotifier)
 
   ```dart
   import 'package:flutter/material.dart';
@@ -926,7 +926,7 @@ provider: ^3.0.0
 
   *  Use the provider for providing data. 
 
-    > Always use the provider on the parent class of the class where we need to use provider
+    > Always use the provider on the parent class of the class where we need to use provider.ChaneNotifier is also found in foundation.dart
 
   * Enable the provider in the parent component using ChangeNotifierProvider
 
@@ -1014,7 +1014,7 @@ void main() {
   print(prs.name);
   prs.breathe();
   print(prs.speed);
-  print(prs.sitDown );
+  print(prs.sitDown);
 }
 ```
 
@@ -1037,4 +1037,686 @@ Using **ChangeNotifierProvider.value()**, is right way and suggestible way. Beca
 #### Cleaning data in Provider
 
    when a page that uses data from the ChangeNotifierProvider is navigated / pushNamed, then the data used by the page is cleaned up automatically by ChangeNotofierProvider to prevent memory leaks.
+
+##### Alternatives of Provider.of(context)
+
+```dart
+Consumer<ProductModel>(
+  builder: (ctx, product, child) => IconButton(
+    icon: Icon(
+      product.isFavorite ? Icons.favorite : Icons.favorite_border,
+    ),
+    onPressed: () {
+      product.toggleFavouriteStatus();
+    },
+    color: Theme.of(context).accentColor,
+  ),
+)
+```
+
+* `Provider.of(context, listen: true)` will enable update whenever the data changes in the component
+
+* `Provider.of(context, listen: false)` will not enable update whenever the data changes in the component.
+
+* listen: true is the default value
+
+* Whenever the data changes the entire subtree gets rebuilt.
+
+  But when only a part of subtree need to be updated, then we `Consumers`
+
+  ```dart
+  import 'package:flutter/material.dart';
+  
+  import 'package:provider/provider.dart';
+  
+  import 'package:shop_app/routes/routes.dart';
+  import 'package:shop_app/providers/product_model.dart';
+  
+  class ProductItem extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      final product = Provider.of<ProductModel>(context, listen: false);
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: GridTile(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(Routes.product_details, arguments: product.id);
+            },
+            child: Image.network(
+              product.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+          footer: GridTileBar(
+            backgroundColor: Colors.black87,
+            leading: Consumer<ProductModel>(
+              builder: (ctx, product, child) => IconButton(
+                icon: Icon(
+                  product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                ),
+                onPressed: () {
+                  product.toggleFavouriteStatus();
+                },
+                color: Theme.of(context).accentColor,
+              ),
+            ),
+            title: Text(
+              product.title,
+              textAlign: TextAlign.center,
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {},
+              color: Theme.of(context).accentColor,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+  ```
+
+  In the above code the listen is false so the app will not re-render when the data changes, but only the favorite icon button widget will get re-rendered since we are using `Consumer` around it.
+
+* Arguments of `Consumer(ctx, data_provider, child)`, the child Argument is used to include the non-rendering parts of the consumer
+
+  ```dart
+  Consumer<ProductModel>(
+    builder: (ctx, product, child) => Column(children: <Widget>[
+      IconButton(
+      icon: Icon(
+        product.isFavorite ? Icons.favorite : Icons.favorite_border,
+      ),
+      onPressed: () {
+        product.toggleFavouriteStatus();
+      },
+      color: Theme.of(context).accentColor,
+    ),
+      child // this is the child argument, this is declared in the child arguments in Consumer 
+    ]),
+    child: Text('Will not be re-rendered even in consumer')
+  )
+  ```
+
+  > ```dart
+  > PopupMenuButton(icon: Icon(Icons.more_vert, itemBuilder: (_)[
+  >   PopupMenuItem(child: Text('Fav'), value: 0),
+  >   PopupMenuItem(child: Text('All'), value: 1)
+  > ]),
+  > ```
+  >
+  > This is **menu** created like android **options menu**
+
+#### Working with muliple providers
+
+```dart
+return MultiProvider(provider: [
+  ChangeNotifierProvider(value: Provider1),
+  ChangeNotifierProvider(value: Provider2),
+], child: MaterialApp(/*...*/));
+```
+
+###### Imports and Exports
+
+If we have two classes or two things exported, but in the destination file if you need only one thing then use **show**
+
+```dart
+import 'package:flutter/foundation.dart';
+
+class CartItem {
+  final String id;
+  final String title;
+  final int quantity;
+  final double price;
+
+  CartItem({
+    @required this.id,
+    @required this.title,
+    @required this.quantity,
+    @required this.price,
+  });
+}
+
+class CartProvider with ChangeNotifier {
+  Map<String, CartItem> _items = {};
+
+  Map<String, CartItem> get item {
+    return {..._items};
+  }
+
+  int get itemCount {
+    return _items.isEmpty ? 0 : _items.length;
+  }
+}
+```
+
+```dart
+import './cart.dart' show CartProvider;
+```
+
+#### Notifications
+
+##### Snackbar 
+
+```dart
+Scaffold.of(context).showSnackbar(SnackBar(
+	content: Text('Added Item to the Cart!', align: TextAlign.center),
+  duration: Duration(seconds: 2), // snackbar will be show for 2 seconds
+  action: SnackBarAction(label: 'UNDO', onPressed: () {
+    // logic
+  }),
+));
+```
+
+##### Rapid Addition and showing of SnackBar
+
+```dart
+Scaffold.of(context).hideCurrentSnackBar();
+```
+
+##### Dialogs and Dismissible
+
+```dart
+Dismissible(
+      key: ValueKey(id),
+      direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return Platform.isIOS
+            ? showCupertinoDialog(
+                context: context,
+                builder: (ctx) => CupertinoAlertDialog(
+                  title: Text('Are you sure?'),
+                  content:
+                      Text('Do you want to remove the item from the cart?'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('No'),
+                      onPressed: () {
+                        Navigator.of(ctx).pop(false);
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('Yes'),
+                      onPressed: () {
+                        Navigator.of(ctx).pop(true);
+                      },
+                    )
+                  ],
+                ),
+              )
+            : showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text('Are you sure?'),
+                  content:
+                      Text('Do you want to remove the item from the cart?'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('No'),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('Yes'),
+                      onPressed: () {
+                        Navigator.of(ctx).pop(true);
+                      },
+                    ),
+                  ],
+                ),
+              );
+      },
+      onDismissed: (direction) {
+        cart.removeItem(productId);
+      },
+      background: Container(
+        color: Theme.of(context).errorColor,
+        child: Icon(
+          Icons.delete,
+          size: 30,
+          color: Colors.white,
+        ),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.all(15),
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+      ),
+      child: // any child
+    );
+```
+
+> confirmDismiss: // This will need Future, hence Navigator.of(context).pop(true / false);
+
+> In CircleAvatar, for background Image we cannot use, Image.asset or Image.network instead use AssetImage, NetworkImage
+
+#### Inputs and InputFields
+
+```dart
+Form(
+	child: Column(children: [
+    TextFormField(
+      decoration: InputDecoration(labelText: 'Title'),
+      textInputAction: TextInputAction.next,
+    ),
+    TextFormField(
+      decoration: InputDecoration(labelText: 'Title'),
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.numberWithOptions() // this for allowing only num
+    ),
+  ]),
+);
+```
+
+**textInputAction** is the customized action button which appears in the right corner of thekeyboard, This is basically a enum with properties like done, next, previous....etc..,
+
+##### Focus in TextFields
+
+This can be done with the help of **FocusNode*
+
+```dart
+ final _priceFocusNode = FocusNode();
+
+body: Form(
+	child: Column(children: [
+    TextFormField(
+      decoration: InputDecoration(labelText: 'Title'),
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(_priceFocusNode);
+      }
+    ),
+    TextFormField(
+      decoration: InputDecoration(labelText: 'Title'),
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.numberWithOptions() // this for allowing only num
+      focusNode: _priceFocusNode
+    ),
+  ]),
+);
+```
+
+> FocusScope is like Navigator which is used to focus the fields programmatically. These focus nodes need to be disposed when the page is left
+
+##### Adding listener
+
+```dart
+@override
+  void initState() {
+    _imageURLFocusNode.addListener(_updateImageURL);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _imageURLFocusNode.removeListener(_updateImageURL);
+    _priceFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+    _imageURLFocusNode.dispose();
+  }
+
+  void _updateImageURL() {
+    if(!_imageURLFocusNode.hasFocus && _imageUrlController.text.isNotEmpty) {
+      setState(() {
+        _urlValue = _imageUrlController.text;
+      });
+    }
+  }
+
+Widget build(BuildContext context) {
+  return Expanded(
+    child: TextFormField(
+      decoration: const InputDecoration(labelText: 'Image URL'),
+      keyboardType: TextInputType.url,
+      textInputAction: TextInputAction.done,
+      controller: _imageUrlController,
+      focusNode: _imageURLFocusNode,
+    ),
+  );
+}
+```
+
+##### Submitting forms
+
+```dart
+//call a function on save button click or any trigger or last form field onFieldSubmitted event
+// to save the form we need a global key
+final _form = GlobalKey<FormState>();
+void _submitForm() {
+  _form.currentState.save();
+}
+
+Widget build(BuildContext context) {
+  return Form(
+  	key: _form,
+    ...//
+  );
+}
+```
+
+> _form.currentState.save() is needed to invoke onSaved method on each TextFields which will save the current value to temporary variable
+
+```dart
+import 'package:flutter/material.dart';
+
+import 'package:shop_app/providers/product_model.dart';
+
+class EditProductScreen extends StatefulWidget {
+  @override
+  _EditProductScreenState createState() => _EditProductScreenState();
+}
+
+class _EditProductScreenState extends State<EditProductScreen> {
+  final _priceFocusNode = FocusNode();
+  final _descriptionFocusNode = FocusNode();
+  final _imageURLFocusNode = FocusNode();
+  final _imageUrlController = TextEditingController();
+  final _form = GlobalKey<FormState>();
+
+  var _editedProduct = ProductModel(
+    id: null,
+    price: 0.0,
+    title: '',
+    imageUrl: '',
+    description: '',
+    isFavorite: false,
+  ); // temp var
+
+  String _urlValue = '';
+
+  @override
+  void initState() {
+    _imageURLFocusNode.addListener(_updateImageURL);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _imageURLFocusNode.removeListener(_updateImageURL);
+    _priceFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+    _imageURLFocusNode.dispose();
+  }
+
+  void _updateImageURL() {
+    if (!_imageURLFocusNode.hasFocus && _imageUrlController.text.isNotEmpty) {
+      setState(() {
+        _urlValue = _imageUrlController.text;
+      });
+    }
+  }
+
+  void _saveForm() {
+    _form.currentState.save();
+    print(_editedProduct.description); 
+    print(_editedProduct.imageUrl);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Edit Product'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: _saveForm,
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _form,
+          child: ListView(
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Title'),
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_priceFocusNode);
+                },
+                onSaved: (value) {
+                  _editedProduct = ProductModel(
+                    title: value,
+                    price: _editedProduct.price,
+                    imageUrl: _editedProduct.imageUrl,
+                    description: _editedProduct.description,
+                    id: null,
+                   );
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Price'),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.numberWithOptions(),
+                focusNode: _priceFocusNode,
+                onFieldSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_descriptionFocusNode);
+                },
+                onSaved: (value) {
+                  _editedProduct = ProductModel(
+                    title: _editedProduct.title,
+                    price: double.parse(value),
+                    imageUrl: _editedProduct.imageUrl,
+                    description: _editedProduct.description,
+                    id: null,
+                  );
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Description'),
+                maxLines: 3,
+                keyboardType: TextInputType.multiline,
+                onFieldSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_priceFocusNode);
+                },
+                focusNode: _descriptionFocusNode,
+                onSaved: (value) {
+                  _editedProduct = ProductModel(
+                    title: _editedProduct.title,
+                    price: _editedProduct.price,
+                    imageUrl: _editedProduct.imageUrl,
+                    description: value,
+                    id: null,
+                  );
+                },
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    margin: const EdgeInsets.only(top: 8, right: 10),
+                    child: _urlValue.isEmpty
+                        ? const Text('Enter a URL')
+                        : Image.network(
+                            _urlValue,
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(labelText: 'Image URL'),
+                      keyboardType: TextInputType.url,
+                      textInputAction: TextInputAction.done,
+                      controller: _imageUrlController,
+                      focusNode: _imageURLFocusNode,
+                      onFieldSubmitted: (_) {
+                        _saveForm();
+                      },
+                      onSaved: (value) {
+                        _editedProduct = ProductModel(
+                          title: _editedProduct.title,
+                          price: _editedProduct.price,
+                          imageUrl: value,
+                          description: _editedProduct.description,
+                          id: null,
+                        );
+                      },
+                      // onChanged: (value) {
+                      //   setState(() {
+                      //     _urlValue = value;
+                      //   });
+                      // },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+##### Validators
+
+Flutter allows us to validator functions which in turn validates the values entered in the TextField. 
+
+```dart
+TextFormField(
+  decoration: const InputDecoration(labelText: 'Price'),
+  textInputAction: TextInputAction.next,
+  keyboardType: TextInputType.numberWithOptions(),
+  focusNode: _priceFocusNode,
+  onFieldSubmitted: (_) {
+    FocusScope.of(context).requestFocus(_descriptionFocusNode);
+  },
+  validator: (value) {
+    if(value.isEmpty) {
+      return 'Enter valid price';
+    }  
+    if(double.tryParse(value) == null) {
+      return 'Enter Valid Number';
+    } 
+    if(double.parse(value) <= 0.0) {
+      return 'Enter a number greater than zero';
+    }
+    return null;
+  },
+  onSaved: (value) {
+    _editedProduct = ProductModel(
+      title: _editedProduct.title,
+      price: double.parse(value),
+      imageUrl: _editedProduct.imageUrl,
+      description: _editedProduct.description,
+      id: null,
+    );
+  },
+);
+```
+
+This validator function is triggered by `globalKey.currentState.validate()` or by giving `autoValidate: true`. This will call all validator fucntions in the Form
+
+This is done by `_form.currentState.validate()`
+
+```dart
+void _saveForm() {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
+      _form.currentState.save();
+    print(_editedProduct.description);
+    print(_editedProduct.imageUrl);
+  }
+```
+
+#### Inherited Widget
+
+This is used for passing data to the nested widgets. This is done with InheritedWidget.
+
+```dart
+class InheritedData extends InheritedWidget {
+  final Image asset;
+  InheritedData({ this.asset,  Widget child }) : super(child: child);
+  
+  @override
+  bool updateShouldNotify(InheritedWidget oldWiget) => true;
+  
+  static InheritedData of(BuildContext context) =>
+    	context.inheritFromWidgetOfExactType(InheritedData);
+}
+
+
+// any child insided of InheritedData can use,
+class FlipWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final data = context.inheritFromWidgetOfExactType(InheritedData).asset;
+    // the above line can be used in different way with the implementation of static method
+    final data = InheritedData.of(context);
+    return //..
+  }
+}
+```
+
+**Inherited widgets** are immutable always.
+
+###### Inherited Widgets can even do more.
+
+```dart
+// services file
+Class Servies {
+  ///...
+}
+```
+
+```dart
+// Inherited Widget
+class InheritedData extends InheritedWidget {
+  final Services service;
+  
+  @override
+  bool updateShouldNotify(InheritedWidget oldWiget) => true;
+  
+  static InheritedData of(BuildContext context) => 
+        context.inheritFromWidgetOfExactType(InheritedData);
+}
+```
+
+```dart
+// descendent children can use like
+InheritedData.of(context).service.call();
+InheritedData.of(context).service.print();
+```
+
+###### Generate color dynamically
+
+```dart
+myColor = UniqueColorGenerator.getColor();
+```
+
+##### Types of keys
+
+> Dont use random number for keys
+
+* ValueKey()
+* UniqueKey()
+* ObejctKey()
+* PageStrorageKey()
+* GlobalKey()
+
+
+
+
+
+
+
+
+
+
 
