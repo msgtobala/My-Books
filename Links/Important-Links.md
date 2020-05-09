@@ -273,3 +273,8 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 [**HOW TO REVERT GIT BASED ON COMMIT ID**](https://dev.to/isabelcmdcosta/how-to-undo-the-last-commit--31mg)
 
 [**TRANSFROMS IN FLUTTER**](**https://medium.com/flutter-community/a-deep-dive-into-transform-widgets-in-flutter-4dc32cd575a9**)
+
+[**Flutter Overlay**](https://medium.com/saugo360/https-medium-com-saugo360-flutter-using-overlay-to-display-floating-widgets-2e6d0e8decb9)
+
+[**Static Analysis in Flutter**](https://medium.com/flutter-community/effective-code-in-your-flutter-app-from-the-beginning-e597444e1273)
+

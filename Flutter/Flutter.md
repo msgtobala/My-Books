@@ -40,6 +40,8 @@ This gives compiled highly optimised and performance applications
 
 A widget from flutter is not compiled individually to ios and Android devices. But flutter directly controls the UI and functionality. This is not compiled to native equilance. Flutter directly controls. The widgets and the components are not compiled to native codes.Those are directly controled by **Flutter** out-of-box.
 
+**Flutter** has composition of reactive programming and widgets composition
+
 ### Flutter Versions
 
 Flutter is open source project.Keeps on updating and becoming more more stable.
@@ -1710,9 +1712,33 @@ myColor = UniqueColorGenerator.getColor();
 * PageStrorageKey()
 * GlobalKey()
 
+##### Flutter commands
 
+* ```dart
+  flutter channel
+  ```
 
+* ```dart
+  flutter channel <channel_name>
+  ```
 
+* ```dart
+  flutter packages get
+  ```
+
+* ```dart
+  flutter upgrade
+  ```
+
+* ```dart
+  flutter analyze
+  ```
+
+  Analysis the code and provide static analysis
+
+#####      Static Analayzer
+
+​      Flutter by default is enabled with static analyser which helps to write cleaner code.Dart has a static analysis tool. Static analysis allows you to find problems before executing a single line of code. It’s a great tool used to find possible bugs and ensure that code conforms to style guidelines. When you use IDE to develop an app, Flutter tool analyzes the project’s Dart code and keeps you in a safe place. For example, when you define FloatingActionButton and forget to implement `onPressed`, then IDE warns that the param `onPressed` is required.
 
 
 
