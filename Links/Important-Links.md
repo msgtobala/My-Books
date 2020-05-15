@@ -264,7 +264,7 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 [**ERROR HANDLING IN FLUTTER**](https://medium.com/flutter-community/error-handling-in-flutter-98fce88a34f0)
 
-[**FLUTTER?**](https://medium.com/asos-techblog/flutter-vs-react-native-for-ios-android-app-development-c41b4e038db)9
+[**FLUTTER**](https://medium.com/asos-techblog/flutter-vs-react-native-for-ios-android-app-development-c41b4e038db)
 
 [**TESTING IN FLUTTER**](https://medium.com/@adityadroid/60-days-of-flutter-day-4-5-widget-testing-with-flutter-a30236dd04fc)
 
@@ -277,4 +277,6 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 [**Flutter Overlay**](https://medium.com/saugo360/https-medium-com-saugo360-flutter-using-overlay-to-display-floating-widgets-2e6d0e8decb9)
 
 [**Static Analysis in Flutter**](https://medium.com/flutter-community/effective-code-in-your-flutter-app-from-the-beginning-e597444e1273)
+
+**[Enabling Placeholder styles with chrome developer tools](https://sonpro.website/inspect-placeholder-styles-chrome-developer-tools/)**
 

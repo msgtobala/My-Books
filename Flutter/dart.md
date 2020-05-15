@@ -229,3 +229,90 @@ main() {
 }
 ```
 
+#### Using Type Annotations [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/NE03Lr5M5pD#using-type-annotations)
+
+Remember when we said that variable types are inferred from their initial value? It’s also important to mention that subsequent assignments are not considered. This means that too precise a type may be inferred. If that is not desired, you can add type annotation.
+
+In the example below, we are declaring a variable, `number`, using the `var` keyword. We want the variable to hold any type of number, i.e., `int` and `double`.
+
+```dart
+main() {
+  var number = 3;
+  print(number);
+
+  number = 3.2;
+  print(number);
+}
+```
+
+When you run the code snippet above, you will get an error. When we initialized `number` with an integer, the compiler inferred that `number` is of type `int`. Hence, when we reassigned it a value of type `double`, the compiler displays an error.
+
+Here, we can use type annotation and declare the `number` variable using the `num` data type. Remember that type `num` is generic enough to hold both `int` and `double`.
+
+```dart
+main() {
+  num number = 3;
+  print(number);
+
+  number = 3.2;
+  print(number);
+}
+```
+
+### Dynamic Types [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/NE03Lr5M5pD#dynamic-types)
+
+```dart
+main() {
+  dynamic dynamicVariable = 'A string'; // type String
+  print(dynamicVariable);
+
+  dynamicVariable = 5; // type int
+  print(dynamicVariable);
+
+  dynamicVariable = true; // type bool
+  print(dynamicVariable);
+}
+```
+
+![img](https://www.educative.io/api/collection/10370001/6069685319630848/page/4506757625806848/image/5302076584230912)
+
+## Compile-Time and Run-Time [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/myGvnDxnKR0#compile-time-and-run-time)
+
+Compile-time and runtime are programming terms that refer to different stages in a program’s lifetime. In order to create a program, you first write some source code. The source code defines how the program will function.
+
+Now that we know what compilation is, let’s take that as our base and learn about compile-time through an example.
+
+We have been defining some `int` and `double` variables in our programs with initial values. These variables will always have the same initial value whenever we run the program. These values are *fixed* at the time of *compilation*. Such things are said to be fixed at **compile-time**.
+
+### Run and Run-Time [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/myGvnDxnKR0#run-and-run-time)
+
+After a program is compiled, we can **run** it.
+
+Remember when we took user input from the user in one of the previous [lessons](https://www.educative.io/collection/page/10370001/6069685319630848/4706459042447360)? We could point out that the value displayed by the print statement could change every time we run the program, depending on what the user types. Things that can’t be determined until the program is actually run are said to be fixed at **run-time**.
+
+### Using `final` [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/myGvnDxnKR0#using-final)
+
+A final variable (a variable created using the `final` keyword) is initialized the first time it is used and can only be set once. In other words, the final value will be known at *runtime*.
+
+```dart
+import 'dart:io';
+ 
+main() {
+  final name = stdin.readLineSync();
+  print("Hello " + name);
+}
+```
+
+### Using `const` [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/myGvnDxnKR0#using-const)
+
+A constant variable (a variable created using the `const` keyword) should be created when you know the value at *compile-time*. Like a final variable, a constant variable can also only be set once
+
+```dart
+main() {
+  const name = "Bob";
+
+  // Driver Code
+  print(name);
+}
+```
+

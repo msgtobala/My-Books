@@ -1293,6 +1293,8 @@ Dismissible(
 
 > In CircleAvatar, for background Image we cannot use, Image.asset or Image.network instead use AssetImage, NetworkImage
 
+For Normal form use TextField with controllers(TextEditingControllers)[_controller.text].For complex forms use Form() widget
+
 #### Inputs and InputFields
 
 ```dart
@@ -1311,7 +1313,11 @@ Form(
 );
 ```
 
-**textInputAction** is the customized action button which appears in the right corner of thekeyboard, This is basically a enum with properties like done, next, previous....etc..,
+**textInputAction** is the customized action button which appears in the right corner of the keyboard, This is basically a enum with properties like done, next, previous....etc..,
+
+Events
+
+* onFieldSubmited - Triggered when textInputAction button is clicked
 
 ##### Focus in TextFields
 
@@ -1339,7 +1345,22 @@ body: Form(
 );
 ```
 
-> FocusScope is like Navigator which is used to focus the fields programmatically. These focus nodes need to be disposed when the page is left
+> FocusScope is like Navigator which is used to focus the fields programmatically. These focus nodes need to be disposed when the page is left.This may cause memory leaks.So we need to dispose it.
+>
+> FocusScope.of(context).requestFocus(_focusNode);
+
+For Long inputs like description use maxLines
+
+```dart
+TextField(
+	decoration: InputDecoration(labelText: 'Descriptions'),
+  maxLines: 3,
+  keyboardType: TextInputType.multiline,
+  focusNode: _descFocusNode,
+);
+```
+
+
 
 ##### Adding listener
 
@@ -1586,7 +1607,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
 ##### Validators
 
-Flutter allows us to validator functions which in turn validates the values entered in the TextField. 
+Flutter allows us to write validator functions which in turn validates the values entered in the TextField. 
 
 ```dart
 TextFormField(
@@ -1621,7 +1642,7 @@ TextFormField(
 );
 ```
 
-This validator function is triggered by `globalKey.currentState.validate()` or by giving `autoValidate: true`. This will call all validator fucntions in the Form
+This validator function is triggered by `globalKey.currentState.validate()` or by giving `autoValidate: true`. This will call all validator fucntions in the Form.
 
 This is done by `_form.currentState.validate()`
 
@@ -1636,6 +1657,17 @@ void _saveForm() {
     print(_editedProduct.imageUrl);
   }
 ```
+
+default initial values can be set to the Inputs
+
+```dart
+TextFormField(
+ initialValue: 'initialValue ',
+  ....
+);
+```
+
+> Initial values and controllers cannot be used together.
 
 #### Inherited Widget
 
@@ -1654,7 +1686,7 @@ class InheritedData extends InheritedWidget {
 }
 
 
-// any child insided of InheritedData can use,
+// any child inside of InheritedData can use,
 class FlipWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -1712,6 +1744,63 @@ myColor = UniqueColorGenerator.getColor();
 * PageStrorageKey()
 * GlobalKey()
 
+### Reaching out to web servers
+
+Futures
+
+```dart
+void main() {
+  var myFuture = Future((){
+    return 'Hello';
+  });
+  print('This runs first');
+  myFuture.then((res) => print(res));
+  print('This also run first before Future');
+}
+
+// output
+// This runs first
+// This also run first before Future
+// Hello
+```
+
+Futures with then and catch
+
+* **showDialog** returns Future.
+* catchError block will be executed when there is an error
+* If there are many catchError block the first catchError block that fails with error will be executed 
+
+```dart
+void main() {
+  var myFuture = Future((){
+    return 'Hello';
+  });
+  print('This runs first');
+  myFuture.then((res) => print(res)).catchError((error) => print(error));
+  print('This also run first before Future');
+}
+```
+
+async / await
+
+```dart
+Future<void> fetchProducts async {
+  try {
+    await httpCall;
+  } catch(error) {
+    print(error);
+  }
+}
+```
+
+**Delaying Future**
+
+```dart
+Future.delayed(Durarion.zero);
+```
+
+
+
 ##### Flutter commands
 
 * ```dart
@@ -1740,7 +1829,7 @@ myColor = UniqueColorGenerator.getColor();
 
 ​      Flutter by default is enabled with static analyser which helps to write cleaner code.Dart has a static analysis tool. Static analysis allows you to find problems before executing a single line of code. It’s a great tool used to find possible bugs and ensure that code conforms to style guidelines. When you use IDE to develop an app, Flutter tool analyzes the project’s Dart code and keeps you in a safe place. For example, when you define FloatingActionButton and forget to implement `onPressed`, then IDE warns that the param `onPressed` is required.
 
-
+###### Inside of initState, we dont need to setState variables for changes, we can directly set the values like `_data = something` .This would automatically changes the UI becuase it renders before the build method.
 
 
 

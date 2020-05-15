@@ -22,8 +22,6 @@ Markdown is so **cool** or Markdown is __cool__
 Markdown is so ~~Hard~~
 ```
 
-
-
 ##### Headings
 
 # h1
