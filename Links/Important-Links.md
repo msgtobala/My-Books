@@ -280,3 +280,5 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 **[Enabling Placeholder styles with chrome developer tools](https://sonpro.website/inspect-placeholder-styles-chrome-developer-tools/)**
 
+[**Dart 2.8**](https://medium.com/dartlang/announcing-dart-2-8-7750918db0a)
+

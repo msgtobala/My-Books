@@ -1804,6 +1804,12 @@ Future.delayed(Durarion.zero);
 ##### Flutter commands
 
 * ```dart
+  pub outdated or flutter pub outdated
+  ```
+
+  To identify the out-dated packages and dependencies after identifying the outdated packages use `pub upgrade`
+
+* ```dart
   flutter channel
   ```
 
@@ -1825,13 +1831,14 @@ Future.delayed(Durarion.zero);
 
   Analysis the code and provide static analysis
 
+  > Pub get uses PubGrub algorithm to fetch dependencies.
+
 #####      Static Analayzer
 
 ​      Flutter by default is enabled with static analyser which helps to write cleaner code.Dart has a static analysis tool. Static analysis allows you to find problems before executing a single line of code. It’s a great tool used to find possible bugs and ensure that code conforms to style guidelines. When you use IDE to develop an app, Flutter tool analyzes the project’s Dart code and keeps you in a safe place. For example, when you define FloatingActionButton and forget to implement `onPressed`, then IDE warns that the param `onPressed` is required.
 
 ###### Inside of initState, we dont need to setState variables for changes, we can directly set the values like `_data = something` .This would automatically changes the UI becuase it renders before the build method.
 
+**Dart 2.8**
 
-
-
-
+We optimized the performance of the pub tool by adding support for parallel fetching of packages when running `pub get`, and by deferring `pub run` precompilation.

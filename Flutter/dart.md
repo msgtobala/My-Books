@@ -60,7 +60,7 @@ In the same way, everything in Dart is an object. Objects in a programming langu
 
 ### Variables
 
-Variables are used for storing information which can then be used by the computer program. Let’s look at this concept from a different angle.
+Variables are used for storing information which can then be used by the computer program.
 
 ![img](https://www.educative.io/api/collection/10370001/6069685319630848/page/4624163710959616/image/5427857654284288)
 
@@ -90,8 +90,6 @@ main() {
 
 In most languages, primitive data types are value types, but in Dart, **all** data types are objects. This means that even primitive data types are reference types. Therefore, we can say that in Dart, variables specifically store references and are referring to objects.
 
-
-
 ### Default Value [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/xVvQvDQ920P#default-value)
 
 Uninitialized variables have an initial value of `null`. Even variables with numeric types are initially `null` because numbers—like everything else in Dart—are objects. `null` simply means that the variable is not referencing an object; it’s not referencing anything.
@@ -103,6 +101,7 @@ main() {
     int notInitialized;
     print(notInitialized);
 } 
+// null
 ```
 
 ```dart
@@ -118,15 +117,11 @@ main() {
 }
 ```
 
-```dart
-Dart numbers are further divided into two subtypes:
+ **Dart numbers are further divided into two subtypes:**
 
 integers (int)
 doubles (double)
 Both int and double are subtypes of num.
-
-Let’s look at each type in a bit more detail below.
-```
 
 ### Strings
 
@@ -165,9 +160,9 @@ main() {
 ```dart
 main() {
   var s1 = 'String ''test';
-    
   print(s1);
 }
+// Stringtest
 ```
 
 ```dart
@@ -202,7 +197,7 @@ main() {
 
 ## Type Inference and Annotation
 
-Dart is strongly typed. Strongly typed languages take extra precaution and have rules and restrictions to ensure that a variable’s value always matches the variable’s static type.
+Dart is strongly typed. Strongly typed languages take extra precaution and have rules and restrictions to ensure that a variable’s value always matches the variable’s static type.Also dart has type interference.
 
 Although types are mandatory in Dart, **type annotations** are optional because of **type inference**
 
