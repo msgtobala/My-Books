@@ -311,3 +311,346 @@ main() {
 }
 ```
 
+## Types of Operators
+
+Operators are symbols that perform *operations* used for modifying or manipulating data. Manipulating data is an essential part of any programming language, and Dart is no different, providing a rich set of operators for its basic types.
+
+- Arithmetic Operators
+- Equality and Relational Operators
+- Type Test Operators
+- Assignment Operators
+- Logical Operators
+- Bitwise and Shift Operators
+
+Expressions are composed of two things; *operands* and *operators*.
+
+![Operators](../images/operators.svg)
+
+### Arithmetic Operators
+
+| **Operator** | **Use**                                                      |
+| ------------ | ------------------------------------------------------------ |
+| `+`          | Adds two operands                                            |
+| `-`          | Subtracts the second operand from the first                  |
+| `-`expr      | Reverses the sign of the expression (unary minus)            |
+| `*`          | Multiplies both operands                                     |
+| `/`          | Divides the first operand by the second operand.(Gives the exact value of division ). |
+| `~/`         | Divides the first operand by the second operand and returns an integer value(Divides and gives only the integer value) |
+| `%`          | Gets the remainder after division of one number by another   |
+
+```dart
+main() {
+  var operand1 = 10;
+  var operand2 = 7;
+
+  print(operand1 + operand2);
+  print(operand1 - operand2);
+  print(- operand1);
+  print(operand1 * operand2);
+  print(operand1 / operand2);
+  print(operand1 ~/ operand2);
+  print(operand1 % operand2);
+}
+
+// 17
+// 3
+// -10
+// 70
+// 1.4285714285714286
+// 1
+// 3
+```
+
+| **Operator** | **Use**       |
+| ------------ | ------------- |
+| `++`var      | var = var + 1 |
+| var`++`      | var = var + 1 |
+| `--`var      | var = var - 1 |
+| var`--`      | var = var - 1 |
+
+### ++var [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/gxq6pGZ414G#var)
+
+The expression value of `++var` is `var+1`. When we insert the expression in a print statement, the compiler first increments the variable by **1** and then prints the value of the variable.
+
+```dart
+main() {
+  var prefixIncrement = 5;
+
+  print(++prefixIncrement);
+}
+
+// 6
+```
+
+### var++ [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/gxq6pGZ414G#var-2)
+
+The expression value of `var++` is `var`. When we insert the expression in a print statement, the compiler first prints the value of the variable and then increments it by **1**.
+
+```dart
+main() {
+  var postfixIncrement = 5;
+
+  print(postfixIncrement++);
+  print(postfixIncrement);
+}
+
+// 5
+// 6
+```
+
+### - -var [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/gxq6pGZ414G#-var)
+
+The expression value of `--var` is `var-1`. When we insert the expression in a print statement, the compiler first decrements the variable by **1** and then prints the value of the variable.
+
+```dart
+main() {
+  var prefixDecrement = 5;
+
+  print(--prefixDecrement);
+}
+
+// 4
+```
+
+### var- - [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/gxq6pGZ414G#var-)
+
+The expression value of `var--` is `var`. When we insert the expression in a print statement, the compiler first prints the value of the variable and then decrements it by **1**.
+
+```dart
+main() {
+  var postfixDecrement = 5;
+
+  print(postfixDecrement--);
+  print(postfixDecrement);
+}
+// 5
+// 4
+```
+
+
+
+### Equality and Relational Operators
+
+![Equality and Relational Operators](../images/equality.svg)
+
+| **Operator** | **Use**                                                      |
+| ------------ | ------------------------------------------------------------ |
+| `==`         | Checks if the values of the two operands are equal (true if equal) |
+| `!=`         | Checks if the values of the two operands are not equal (true if not equal) |
+| `>`          | Checks if the value of the left operand is greater than the value of the right operand |
+| `<`          | Checks if the value of the left operand is less than the value of the right operand |
+| `>=`         | Checks if the value of the left operand is greater than or equal to the value of the right operand |
+| `<=`         | Checks if the value of the left operand is less than or equal to the value of the right operand |
+
+
+
+### Type Test Operators
+
+![Type Test Operators](../images/type.svg)
+
+| Operator | Use                                        |
+| -------- | ------------------------------------------ |
+| `as`     | typecast                                   |
+| `is`     | True if the object has the specified type  |
+| `is!`    | False if the object has the specified type |
+
+![type-operator](../images/type-operator.svg)
+
+```dart
+main() {
+  double type1 = 5.0;
+  int type2 = 87;
+  String type3 = "educative";
+  bool type4 = true;
+
+  print(type1 is int);
+  print(type2 is int);
+  print(type3 is String);
+  print(type4 is double);
+  print(type4 is! double);
+}
+
+// false
+// true
+// true
+// false
+// true
+```
+
+
+
+### Assignment Operators
+
+![Assignment Operator](../images/assignment.svg)
+
+
+
+### Compound Assignment Operators 
+
+| =    | -=   | /=   | %=   | >>=  | ^=   |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+| +=   | *=   | ~/=  | <<=  | &=   | \|=  |
+
+![compound operator](../images/compound operator.svg)
+
+It’s equivalent to the following:
+
+![compound equivalent](../images/compound equivalent.svg)
+
+`+=`
+
+```dart
+main() {
+  var A = 10;
+  var B = 7;
+  
+  print("Before using a compound assignment operator:");
+  print(A);
+
+  A += B;
+
+  print("After using a compound assignment operator:");
+  print(A);
+}
+
+// 10
+// 17
+```
+
+### `&=` (performs binary AND)
+
+```dart
+main() {
+  var A = 10;
+  var B = 7;
+  
+  print("Before using a compound assignment operator:");
+  print(A);
+
+  A &= B;
+
+  print("After using a compound assignment operator:");
+  print(A);
+}
+```
+
+
+
+### Logical Operators
+
+| **Operator** | **Name**    | **Use**                                                      |
+| ------------ | ----------- | ------------------------------------------------------------ |
+| `!`          | Logical NOT | Reverses the logical state of its operand. If a condition is true, then the Logical *NOT* operator will make it false |
+| `||`         | Logical OR  | If any of the two operands is not false, then the result is true |
+| `&&`         | Logical AND | If both the operands are not false, then the result is true  |
+
+![Logical](../images/logical.svg)
+
+> `!` is a unary operator, i.e., it takes one operand.
+
+![logical_ops](../images/logical_ops.svg)
+
+```dart
+main() {
+  var A = true;
+  var B = false;
+  var expr = A && B; //false
+
+  print(!A); // !true --> false
+  print(!B); // !false --> true
+  print(true || expr); // true || expr --> true
+  print(false || expr); // false || expr --> expr
+  print(true && expr); // true && expr --> expr
+  print(false && expr); // false && expr --> false
+}
+```
+
+
+
+### Bitwise and Shift Operators
+
+![bit-wise](../images/bit-wise.svg)
+
+| **Operator** | **Name**                     | **Use**                                                      |
+| ------------ | ---------------------------- | ------------------------------------------------------------ |
+| `&`          | Bitwise **AND**              | If the corresponding bit in both operands is **1** it will give a **1**, else **0** |
+| `|`          | Bitwise **OR**               | If the corresponding bit in at least one operand is **1** it will give a **1**, else **0** |
+| `^`          | Bitwise **XOR**              | If the corresponding bit in only one operand is **1** it will give a **1**, else **0**. Same 0 different 1 |
+| `~`          | Unary Bitwise **Complement** | Bits which are **0** become **1** and bits which are **1** become **0** [+12 => (-)13][-12 => (+)11] |
+
+### Shift Operator
+
+| **Operator** | **Name**    | **Use**                                                      |
+| ------------ | ----------- | ------------------------------------------------------------ |
+| `<<`         | Shift Left  | Shifts all the bits of its operand to the left by the specified amount |
+| `>>`         | Shift Right | Shifts all the bits of its operand to the right by the specified amount |
+
+> Both bitwise and shift operators work on binary numbers.
+>
+> The numbers are stored in binary form. However, we see the operands and the results in decimal, while the operations take place in binary.
+
+![bitwise-rules](../images/bitwise-rules.svg)
+
+![bitwise-and](../images/bitwise-and.svg)
+
+### Right Shift
+
+![Shift](../images/shift.png)
+
+
+
+### Precedence Table
+
+| **Description** | **Operator**                                  |
+| --------------- | --------------------------------------------- |
+| Unary postfix   | `.`, `?.`, `++`, `--`, `[``]`, `()`           |
+| Unary prefix    | `-`, `!`, `˜`, `++`, `--`, `await`            |
+| Multiplicative  | `*`, `/`, `˜/`, `%`                           |
+| Additive        | `+`, `-`                                      |
+| Shift           | `<<`, `>>`, `>>>`                             |
+| Bitwise AND     | `&`                                           |
+| Bitwise XOR     | `ˆ`                                           |
+| Bitwise OR      | `|`                                           |
+| Relational      | `<`, `>`, `<=`, `>=`, `as`, `is`, `is!`       |
+| Equality        | `==`, `!=`                                    |
+| Logical AND     | `&&`                                          |
+| Logical Or      | `||`                                          |
+| If-null         | `??`                                          |
+| Conditional     | `?` `:`                                       |
+| Cascade         | `..`                                          |
+| Assignment      | `=`, `*=`, `/=`, `+=`, `-=`, `&=`, `ˆ=`, etc. |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
