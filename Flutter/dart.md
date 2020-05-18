@@ -62,7 +62,7 @@ In the same way, everything in Dart is an object. Objects in a programming langu
 
 Variables are used for storing information which can then be used by the computer program.
 
-![img](https://www.educative.io/api/collection/10370001/6069685319630848/page/4624163710959616/image/5427857654284288)
+![img](../images/variables.png)
 
 ```dart
 main() {
@@ -70,7 +70,7 @@ main() {
 }
 ```
 
-![img](https://www.educative.io/api/collection/10370001/6069685319630848/page/5618358982541312/image/4563202891317248)
+![img](../images/numbers.svg)
 
 ### Data types
 
@@ -139,9 +139,9 @@ main() {
 }
 ```
 
-![img](https://www.educative.io/api/collection/10370001/6069685319630848/page/5370884871159808/image/6044750744387584)
+![img](../images/template_literals.png)
 
-![img](https://www.educative.io/api/collection/10370001/6069685319630848/page/5370884871159808/image/5497756166651904)
+![img](../images/expressions.png)
 
 ```dart
 main() {
