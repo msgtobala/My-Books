@@ -620,37 +620,331 @@ main() {
 | Cascade         | `..`                                          |
 | Assignment      | `=`, `*=`, `/=`, `+=`, `-=`, `&=`, `ˆ=`, etc. |
 
+## Dart Collections
+
+#### Functions
+
+In computer programming, a function or a method is a block of code that performs a specific task. The block of code is given a name, much like a variable. The function is called using this name whenever that specific task needs to be performed. This removes the need to type the same code over and over again; all you have to do is call the function’s name.
+
+Like mathematical functions, programming functions take in an input, known as an **argument**, perform some operations on that input, and then return the resulting output.
+
+![Functions](https://www.educative.io/api/collection/10370001/6069685319630848/page/5717658492207104/image/5116049630429184.png)
+
+We can divide functions into two broad categories:
+
+- Built-In Functions
+- User-Defined Functions
+
+Examples
+
+```dart
+main() {
+  String s1 = "hello";
+  print(s1.indexOf("o"));
+}
+```
+
+## Collections
+
+**Collections** are objects that group other objects together according to a conceptual schema. For example, a dictionary is a collection of words and a card deck is a collection of cards.
+
+Another name for collections is *data structures* and there is a good reason for that. **Data structures** are a means of structuring data. They are used to store, manipulate, and retrieve all types of data.
+
+![Collections](../images/collections.svg)
 
 
 
+`List`, `Set`, and `Map` are all types in Dart. A variable can be of the above three types along with the primitive types.
+
+### List: The Dart Array
+
+**Lists** are an *ordered* collection of objects. This means that every element in a list has a fixed position. Use a List when you need to access objects by index.
+
+### Creating a List [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/qAEGvv8k8V7#creating-a-list)
+
+#### * Using Literals
+
+The simplest way is using literals along with square brackets (`[]`).
+
+![Lists](../images/list.svg)
+
+```dart
+main() {
+  var simpleList = [1,2,3];
+
+  print(simpleList);
+}
+```
+
+> Remember how we said that `List` is a type when we were discussing [data types](https://www.educative.io/collection/page/10370001/6069685319630848/5618358982541312)? Well in the code above, Dart [infers](https://www.educative.io/collection/page/10370001/6069685319630848/5672642201780224) that `simpleList` has a type `List` (a `List` with elements of type `int`).
+
+#### Using a Constructor [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/qAEGvv8k8V7#using-a-constructor)
+
+You can also declare a list using a *List constructor*. A **List constructor** creates an object using the `List` keyword followed by parenthesis (`()`).
+
+![List](../images/dynamic_list.svg)
+
+```dart
+main() {
+  var listOfVegetables = List();
+
+  print(listOfVegetables);
+}
+```
+
+```dart
+main() {
+  var listOfVegetables = List(2);
+
+  print(listOfVegetables);
+}
+```
+
+#### List with Type
+
+Instead of depending on Dart’s type inference, we can specify the type that a list should contain.
+
+![List With Type](../images/list_with_type.svg)
+
+```dart
+main() {
+  var listOfVegetables = List<String>();
+
+  print(listOfVegetables is List<String>);
+}
+// true
+```
+
+Lists use zero-based indexing. This means that the first element of a list is located at the **0th** index.
+
+![Indexing](../images/indexing.svg)
+
+Since each element has its own position, a list can contain duplicates of a single element because each duplicate is still unique in its position
+
+#### Accessing an Element [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/qVqzogoyYBG#accessing-an-element)
+
+![Accessing Lists](../images/accessing_lists.svg)
+
+```dart
+main() {
+  var listOfVegetables = ['potato', 'carrot', 'cucumber'];
+
+  print(listOfVegetables[1]);
+}
+```
+
+#### Finding the Length of a List
+
+The length of a list is simply the number of elements in that list. To find the length of a list, we can access the `length` property. To access any property we use the dot operator (`.`).
+
+![List Length](../images/length.svg)
+
+```dart
+main() {
+  var listOfVegetables = ['potato', 'carrot', 'cucumber'];
+
+  print(listOfVegetables.length);
+}
+```
+
+#### Adding a Single Element
+
+We can add a single element to the end of an already existing list using the `add` method. The only condition is that the element you add must be of the same type as the elements of the list.
+
+![Add elements](../images/add_list.svg)
+
+```dart
+main() {
+  var listOfVegetables = ['potato', 'carrot', 'cucumber'];
+
+  listOfVegetables.add('cabbage');
+
+  print(listOfVegetables);
+}
+```
+
+#### Adding Multiple Elements
+
+We can add multiple elements to an already existing list using the `addAll` method. Again, the only condition is that the elements you add must all be of the same type as the elements of the list.
+
+The `addAll` method also has a single parameter which is a list. The list should contain the elements you want to add to an already existing list. The type of the parameter is `List`, where the data type depends on the list you call the method on.
+
+In conclusion, `addAll` basically merges the elements of two lists into one.
+
+![Add all](../images/add_all.svg)
+
+```dart
+main() {
+  var listOfVegetables = ['potato', 'carrot', 'cucumber', 'cabbage'];
+
+  listOfVegetables.addAll(['broccoli', 'zucchini']); 
+
+  print(listOfVegetables);
+
+  var vegetablesToAdd = ['okra', 'capsicum'];
+
+  listOfVegetables.addAll(vegetablesToAdd);
+
+  print(listOfVegetables);
+}
+```
+
+#### Adding Elements in an Index
+
+```dart
+var vegetables = [];
+orders.insert(0,'potato');
+```
+
+#### Removing a Single Element
+
+To remove a single element from an already existing list, we can use the `removeAt` method which removes the element at the specified index.
+
+The `removeAt` method has a single parameter which is the index of the element you want to remove. The type of the parameter is `int`.
+
+![removeAt](../images/removeAt.svg)
+
+```dart
+main() {
+  var listOfVegetables = ['potato', 'carrot', 'cucumber', 'cabbage', 'broccoli', 'zucchini'];
+
+  listOfVegetables.removeAt(0);
+  print(listOfVegetables);
+
+  listOfVegetables.removeAt(2);
+  print(listOfVegetables);
+}
+```
+
+```dart
+main() {
+  var listOfVegetables = ['carrot', 'cucumber', 'zucchini'];
+
+  var carrotIndex = listOfVegetables.indexOf('carrot');
+  listOfVegetables.removeAt(carrotIndex);
+
+  print(listOfVegetables);
+}
+```
+
+#### Removing All Elements
+
+```dart
+main() {
+  var listOfVegetables = ['cucumber', 'zucchini'];
+
+  listOfVegetables.clear();
+
+  print(listOfVegetables);
+}
+```
+
+## The `map()` Method 
+
+`map()` maps all the items of a list to an expression or statement. For instance, we could have a list of integers and we want to calculate the square of each integer in the list. `map()` could be used to solve such a problem.
+
+![Map](../images/map.svg)
+
+```dart
+main() {
+  var listOfVegetables = ['carrot', 'cucumber', 'zucchini'];
+  var mappedVegetables = listOfVegetables.map((vegetable) => 'I love $vegetable');
+  print(mappedVegetables);
+}
+
+// (I love carrot, I love cucumber, I love zucchini)
+```
+
+You might have noticed that the output is not a list, as it does not have square brackets. To transform the result of `map()` to a list we can use the `toList()` method.
+
+```dart
+main() {
+  var listOfVegetables = ['carrot', 'cucumber', 'zucchini'];
+  var mappedVegetables = listOfVegetables.map((vegetable) => 'I love $vegetable').toList();
+  print(mappedVegetables);
+}
+
+// [I love carrot, I love cucumber, I love zucchini]
+```
+
+## Sets
+
+In Dart, a **set** is an *unordered* collection of *unique* items. This means that items do not have a specified position in a set, therefore, a set cannot have duplicates of the same item.
+
+## Creating a Set 
+
+##### * Using Literals
+
+Just like lists, sets can also be created using set literals. The syntax is pretty much the same, the only difference is that list literals use square brackets (`[]`) while set literals use curly brackets (`{}`).
+
+![Set](../images/set.svg)
+
+```dart
+main() {
+  var simpleSet = {1,2,3};
+
+  print(simpleSet);
+}
+```
+
+sets don’t have duplicates. However, you can still insert duplicates when creating a set, but adding a duplicate item has no effect.
+
+```dart
+main() {
+  var simpleSet = {1,2,3,3};
+
+  print(simpleSet);
+}
+
+// {1, 2, 3}
+```
+
+> Dart infers that `simpleSet` has a type `Set`, a `Set` with elements of type `int`.
+
+![with_type](../images/with_type.svg)
+
+```dart
+main() {
+  var setOfNumbers = <num>{1,1.5,2,2.5};
+
+  // Driver Code
+  print(setOfNumbers);
+}
+```
+
+### Creating an Empty Set Using a Constructor
+
+![set_datatype](../images/set_datatype.svg)
 
 
 
+```dart
+main() {
+  var setOfFruit = <String>{};
+  print(setOfFruit);
 
+  Set<String> anotherSetOfFruit = {};
+  print(anotherSetOfFruit);
+}
+```
 
+Just like a List, a Set is a type and is, therefore, an object. This means that sets have particular properties and particular methods that they can perform. Let’s look at some of them below.
 
+#### Adding a Single Item to a Set [#](https://www.educative.io/courses/learn-dart-first-step-to-flutter/RLgOGLVQ7LK#adding-a-single-item-to-a-set)
 
+We can add a single element to an already existing set using the `add` method. The only condition is that the item you add must be of the same type as the other items of the set.
 
+![set_ele](../images/set_ele.svg)
 
+```dart
+main() {
+  var setOfFruit = <String>{};
 
+  setOfFruit.add('apples');
+  setOfFruit.add('bananas');
+  setOfFruit.add('oranges');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  print(setOfFruit);
+}
+```
 

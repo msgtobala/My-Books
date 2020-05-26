@@ -1842,3 +1842,32 @@ Future.delayed(Durarion.zero);
 **Dart 2.8**
 
 We optimized the performance of the pub tool by adding support for parallel fetching of packages when running `pub get`, and by deferring `pub run` precompilation.
+
+
+
+If you need to exhange the data between provider file in other word if a data in a provider is needed by other Provider, we need to ChangeNotifierProxyProvider instead of ChangeNotifierProvider
+
+```dart
+ ChangeNotifierProxyProvider<dependentProvider, Actual provider>(
+   create: (ctx) => actualProvider(),
+   update: (ctx, dependentProviderData, previousProviderValues) => actualProvdier(),
+ ),
+```
+
+But the ChangeNotifierProxyProvider has to be after the dependent Providers
+
+> The previousProviderValues is needed.This is the one to hold back the other data of Actual Provider.These data has to be given to actual provider.So that they will keep the data
+
+**SetTimeout equivalent in flutter**
+
+```dart
+import 'dart:aysnc';
+
+Timer authTimer = Timer(Duration(seconds: 3), logout); // syntaxt Timer(Duration, function);
+authTimer.cancel(); // cancels the current timer
+```
+
+#### Animations
+
+
+

@@ -155,12 +155,16 @@ const style = {
 
   > Used Unlock CSS modules
 
-  **In new react eject**,
+  **Editing webpack config**,
 
 ```react
  webpack.config.js -->  modules: true,
  localIdentName: '[name]__[local]__[hash:base64:5]' // in line no.  498
 ```
+
+**In Newer versions of react**
+
+In newer versions of react just use `file.module.css`.CSS modules will be enabled
 
 * Source Map
 
