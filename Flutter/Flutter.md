@@ -65,13 +65,22 @@ Flutter is open source project.Keeps on updating and becoming more more stable.
 #### In Windows,
 
 * Download [Flutter SDK](https://flutter.dev/docs/get-started/install/windows)
+
 * Extract and unzip the folder and note the location of extraction
+
 * Open environment variables from control panel
+
 * Create new env variable and include the path of Fluter SDK bin folder
+
 * Run `flutter doctor` to conifrm installation
+
 * Install Android studio, configure and download the essentials
+
 * Configure a android virtual device
+
 * Setup android simulator
+
+  If you face any error on licenses the run `flutter doctor --android-licenses`
 
 ### Creating a flutter project
 
@@ -758,6 +767,56 @@ onUnknownRoute: (settings) {
 
 This is last fallback after the routing table and **onGenrateRoute**
 
+**push**
+
+```dart
+Navigator.push(context, MaterialPageRoute(builder(context) => Page()));
+```
+
+**pop**
+
+```dart
+Navigator.pop(context);
+```
+
+**communicating between routes**
+
+```dart
+onPressed: () async {
+  var navigationResult = await Navigator.push(context, MaterialPageRoute(builder: (context) => Page());
+  if(navigationResult == true) {
+    print('yes');
+  }
+}
+
+Navigator.pop(context, true)
+```
+
+**Prevent the Page of the APP to pop**
+
+> Wrap the Scaffold of the page where the `pop` needs to prevented with `WillPopScope`
+
+```dart
+WillPopScope(
+  onWillPop: () => Future.value(false),
+  child: Scaffold(
+    body: Center(
+      child: Text('Businer'),
+    ),
+  ),
+),
+```
+
+or
+
+```dart
+WillPopScope(onWillpop: () aysnc {
+  	return false;
+});
+```
+
+
+
 #### Responsive Layout in Flutter
 
 creating normal constructor
@@ -882,15 +941,15 @@ then, width: (size / _blockWidth) * SizeConfig.imageSizeMultiplier;
 **Height / padding / margin (top and bottom)**
 
 ```dart
-if, size: 60,
+if, height: 60,
 then, size: (height / _blockHeight) * SizeConfig.heightMultipler;
 ```
 
 **width / padding / margin(left and right)**
 
 ```dart
-if, size: 60,
-then, size: (height / _blockWidth) * SizeConfig.widthMultiplier;
+if, width: 60,
+then, size: (width / _blockWidth) * SizeConfig.widthMultiplier;
 ```
 
 #### State Management
@@ -1204,7 +1263,7 @@ import './cart.dart' show CartProvider;
 
 ```dart
 Scaffold.of(context).showSnackbar(SnackBar(
-	content: Text('Added Item to the Cart!', align: TextAlign.center),
+	content: Text('Added Item to the Cart!', textAlign: TextAlign.center),
   duration: Duration(seconds: 2), // snackbar will be show for 2 seconds
   action: SnackBarAction(label: 'UNDO', onPressed: () {
     // logic
@@ -1746,6 +1805,111 @@ myColor = UniqueColorGenerator.getColor();
 
 ### Reaching out to web servers
 
+```dart
+Future<String> myFuture {
+  retur Future.value('This is a Future');
+}
+
+// usage
+void getFuture() async {
+  var res = await myFuture();
+  print(res);
+}
+```
+
+> The can future can built along with asycn also
+
+```dart
+Future<String> myFuture async {
+  return 'This is a Future';
+}
+```
+
+**Future delayed**
+
+```dart
+Future<String> myFuture async {
+  Future.delayed(Duration(seconds: 1));
+  retur 'This is a Future';
+}
+```
+
+we can also use then to resolve
+
+```dart
+void getFuture() {
+   myFuture().then(res) => print(res);
+}
+```
+
+**Resturning error using futures**
+
+```dart
+Future<String> myFuture {
+  retur Future.error('This is a Future');
+}
+```
+
+**catching errors**
+
+```dart
+void getFuture() {
+   myFuture().then((res){
+     print(res);
+   }).on catchError(error){
+     print(error);s
+   };
+}
+
+// other way
+void getFuture() {
+  myFuture.then((res) {
+    print(res);
+  }, onError: (error) {
+    print(error);
+  });
+}
+```
+
+**Multiple futures**
+
+> For better understanding, downloading files have been mocked
+
+```dart
+Future<bool> downloadFile(int id, int duration) async {
+  await Future.delayed(Duration(duration: duration));
+  print('The download is completed for the $id');
+  return true;
+}
+
+
+Future runMultipleDownloads() async {
+  var futures = List<Future>();
+  for(var i = 0;i < 10;i++) {
+    futures.add(download(i, Random(i).nextInt(10)));
+  }
+  print('Downloads Started');
+  await Futute.wait(futures);
+  print('All downloads completed');
+}
+```
+
+Sometimes, some futures might take long time due to some reasons(May be network issues etc.,).In such time if the future is running for longtime we need to cancel the current `Future` and show `Try Again` or do something
+
+```dart
+Future<String> myFuture() {
+  Future.delayed(Duration(seconds: 5));
+  return 'Completed';
+}
+
+timeOutFuture() async {
+  var futureValue = await myFuture().timeout(Duration(seconds: 2, onTimeout: () {
+    print('This is the example for future timeout');
+    return 'Default fallback value';
+  }));
+}
+```
+
 Futures
 
 ```dart
@@ -1868,6 +2032,232 @@ authTimer.cancel(); // cancels the current timer
 ```
 
 #### Animations
+
+**AnimatedBuilder**
+
+```dart
+AnimatedBuilder(
+  animation: <>,
+  builder(ctx, child) => Container(...),
+  child: AnyWidgetThatIsInsdieContainer(...),
+);
+```
+
+**AnimatedContainer**
+
+> No need of animation and controller
+
+```dart
+AnimatedContainer(duration: Duration(milliseconds: 300, curve: Curves.easeIn, child: Widget()));
+```
+
+**Custom Transition**
+
+1. Use stateful widget with `SingleTickerProviderStateMixin`
+
+2. Create a animation a controller
+
+3. Create animation for the respective behaviour(FadeTransition etc.,)
+
+4. initialize animation controller and animation in initState
+
+   ```dart
+   void initState() {
+       _controller = AnimationController(
+         vsync: this,
+         duration: Duration(
+           milliseconds: 300,
+         ),
+       );
+       _opacityAnimation = Tween<double>(
+         begin: 0.0,
+         end: 1.0,
+       ).animate(
+         CurvedAnimation(
+           parent: _controller,
+           curve: Curves.fastOutSlowIn,
+         ),
+       );
+       _slideAnimation = Tween<Offset>(
+         begin: Offset(0, -0.5),
+         end: Offset(0, 0),
+       ).animate(
+         CurvedAnimation(
+           parent: _controller,
+           curve: Curves.easeIn,
+         ),
+       );
+       super.initState();
+     }
+   ```
+
+5. Create functions to change the controller between **forward and reverse**
+
+   ```dart
+   void _switchAuthMode() {
+       if (_authMode == AuthMode.Login) {
+         setState(() {
+           _authMode = AuthMode.Signup;
+         });
+         _controller.forward();
+       } else {
+         setState(() {
+           _authMode = AuthMode.Login;
+         });
+         _controller.reverse();
+       }
+     }
+   ```
+
+6. initialize the Animation now in the required places
+
+```dart
+AnimatedContainer(
+  duration: Duration(milliseconds: 300),
+  curve: Curves.easeIn,
+  constraints: BoxConstraints(
+    minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+    maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
+  ),
+  child: FadeTransition(
+    opacity: _opacityAnimation,
+    child: SlideTransition(
+      position: _slideAnimation,
+      child: TextFormField(
+        enabled: _authMode == AuthMode.Signup,
+        decoration:
+        InputDecoration(labelText: 'Confirm Password'),
+        obscureText: true,
+        validator: _authMode == AuthMode.Signup
+        ? (value) {
+          if (value != _passwordController.text) {
+            return 'Passwords do not match!';
+          }
+          return null;
+        }
+        : null,
+      ),
+    ),
+  ),
+),
+```
+
+**Animating or Lazy loading animation for images**
+
+**FadeInImage**
+
+```dart
+FadeInImage(
+  fit: BoxFit.cover,
+  placeholder: AssetImage('replacementImage.png'),
+  image: NetworkImage(
+    product.imageUrl,
+  ),
+),
+```
+
+**HeroTransitions**
+
+Wrap the target and destination images or container with `Hero` widget with a unique tag name
+
+```dart
+Hero(
+  tag: '01',
+  child: Image.network(
+    loadedProduct.imageUrl,
+    fit: BoxFit.cover,
+  ),
+),
+```
+
+**Slivers**(Making Appbar available only on scroll)
+
+1. Use `CustomScrollView` instead `SingleChildScrollView`
+
+2. Dont use `AppBar`
+
+3. ```dart
+   Scaffold(
+         body: CustomScrollView(
+           slivers: <Widget>[
+             SliverAppBar(  // The component that appears as Appbar and the Image component
+               expandedHeight: 300,
+               pinned: true,
+               flexibleSpace: FlexibleSpaceBar(
+                 title: Text(loadedProduct.title),
+                 background: Hero(
+                   tag: productId,
+                   child: Image.network(
+                     loadedProduct.imageUrl,
+                     fit: BoxFit.cover,
+                   ),
+                 ),
+               ),
+             ),
+             SliverList( // rest of the widgets
+               delegate: SliverChildListDelegate(
+                 [
+                   SizedBox(
+                     height: 10,
+                   ),
+                   Text(
+                     '\$${loadedProduct.price}',
+                     style: TextStyle(
+                       color: Colors.grey,
+                       fontSize: 20,
+                     ),
+                   ),
+                   SizedBox(
+                     height: 10,
+                   ),
+                   Container(
+                     width: double.infinity,
+                     padding: const EdgeInsets.symmetric(horizontal: 10),
+                     child: Text(
+                       '${loadedProduct.description}',
+                       textAlign: TextAlign.center,
+                       softWrap: true,
+                     ),
+                   ),
+                 ],
+               ),
+             ),
+           ],
+         ),
+       );
+   ```
+
+   **Page Transition**
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

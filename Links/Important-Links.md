@@ -282,3 +282,9 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 [**Dart 2.8**](https://medium.com/dartlang/announcing-dart-2-8-7750918db0a)
 
+**[FireStore](https://www.youtube.com/watch?v=YZt92I2V704)**
+
+**[Add prevoiusly added cached  file to gitignore](https://stackoverflow.com/questions/54305626/how-to-gitignore-a-particular-java-file-or-any-folder-or-any-xml-file-in-android/54308146)**
+
+**[Using styled components effectively](https://codesandbox.io/s/32n86v90qm?file=/src/index.js:158-275)**
+
