@@ -288,3 +288,9 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 **[Using styled components effectively](https://codesandbox.io/s/32n86v90qm?file=/src/index.js:158-275)**
 
+**[Optional and Defualt parameters in dart](https://stackoverflow.com/questions/13264230/what-is-the-difference-between-named-and-positional-parameters-in-dart)**
+
+**[Optional, default, Multiple constructirs in dart](https://bezkoder.com/dart-flutter-constructors/#:~:text=has%20many%20parameter.-,Dart%2FFlutter%20Constructor%20default%20value,the%20default%20value%20is%20null.](https://bezkoder.com/dart-flutter-constructors/#:~:text=has many parameter.-,Dart%2FFlutter Constructor default value,the default value is null.))**
+
+**[Constructors in dart](https://medium.com/jay-tillu/constructors-in-dart-4f972186c372#:~:text=By%20using%20named%20constructor%20you,can%20identify%20each%20of%20them](https://medium.com/jay-tillu/constructors-in-dart-4f972186c372#:~:text=By using named constructor you,can identify each of them))**
+

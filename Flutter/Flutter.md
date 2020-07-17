@@ -93,6 +93,13 @@ flutter create first_app
 * Create a virtual device and run the virtual device
 * Open terminal navigate to the project folder , run `flutter run`
 
+Running the APP in ios devices,
+
+* Need to have apple account
+* The apple account should be a developer account
+* Select that account in xcode
+* Go to vscode and run `open -a Simulator.app`
+
 ### Material Design
 
 It is a material UI used by google. Flutter uses material ui. We also can set up own UI.
@@ -329,7 +336,623 @@ void main() => runApp(MyApp());
 * Row - renders children next to each other
 * Column - renders children after each other(beneath each other)
 
+**Enums and Multiple constructors**
+
+In Dart we can we have multiple constructors
+
+```dart
+class Person {
+  String name;
+  String age;
+  
+  const Person({ this.name, this.age});
+  
+  Person.veryOld(this.name) {
+    age = 60;
+  }
+  
+  Person.empty() : this('', 0); // this refers to default constructor
+}
+
+void main() {
+  var p1 = Person.veryOld('test');
+  print(p1.name); // test
+  print(p1.age); // 60
+  
+  var p2 = Person.empty();
+  print(p2.name); // ''
+  print(p2.age); // 0
+}
+```
+
+**Multiple constructor for EdgeInsets**
+
+```dart
+class EdgeInsets {
+  double left;
+  double right;
+  double top;
+  double bottom;
+
+  // default constructor
+  EdgeInsets(
+    this.left,
+    this.right,
+    this.top,
+    this.bottom,
+  );
+
+  // all constructor
+  EdgeInsets.all(double value)
+      : left = value,
+        right = value,
+        top = value,
+        bottom = value;
+
+  // only constructor
+  EdgeInsets.only({
+    this.left = 0.0,
+    this.right = 0.0,
+    this.top = 0.0,
+    this.bottom = 0.0,
+  });
+
+  // symmetic constructor
+  EdgeInsets.symmetric({
+    double horizontal = 0.0,
+    double vertical = 0.0,
+  })  : left = horizontal,
+        right = horizontal,
+        top = vertical,
+        bottom = vertical;
+
+  // Redirecting constructor
+  // this here refers to default constructor
+  EdgeInsets.zero() : this(0, 0, 0, 0);
+}
+
+void main() {
+  // EdgetInsets
+  final normal = EdgeInsets(8, 8, 8, 8);
+  print('EdgeInsets default constructor');
+  print('left:' + normal.left.toString());
+  print('top:' + normal.right.toString());
+  print('bottom:' + normal.top.toString());
+  print('right:' + normal.bottom.toString());
+
+  // EdgeInsets.all
+  final all = EdgeInsets.all(8);
+  print('\nEdgeInsets.all');
+  print('left:' + all.left.toString());
+  print('top:' + all.right.toString());
+  print('bottom:' + all.top.toString());
+  print('right:' + all.bottom.toString());
+
+  // EdgeInsets.only
+  final only = EdgeInsets.only(left: 8);
+  print('\nEdgeInsets.only');
+  print('left:' + only.left.toString());
+  print('top:' + only.right.toString());
+  print('bottom:' + only.top.toString());
+  print('right:' + only.bottom.toString());
+
+  // EdgeInsets.symmetric
+  final symmetric = EdgeInsets.symmetric(horizontal: 8);
+  print('\nEdgeInsets.symmetric');
+  print('left:' + symmetric.left.toString());
+  print('top:' + symmetric.right.toString());
+  print('bottom:' + symmetric.top.toString());
+  print('right:' + symmetric.bottom.toString());
+
+  // Redirecting constructor
+  final empty = EdgeInsets.zero();
+  print('\nEdgeInsets.empty');
+  print('left:' + empty.left.toString());
+  print('top:' + empty.right.toString());
+  print('bottom:' + empty.top.toString());
+  print('right:' + empty.bottom.toString());
+}
+```
+
+```dart
+class Customer {
+  String name;
+  int age;
+  String location;
+
+  // constructor
+  Customer(String name, int age, String location) {
+    this.name = name;
+    this.age = age;
+    this.location = location;
+  }
+}
+```
+
+Now you can create new object using a constructor.
+
+```dart
+var customer = Customer("bezkoder", 26, "US");
+```
+
+**Shortest form**
+
+```dart
+class Customer {
+  String name;
+  int age;
+  String location;
+
+  Customer(this.name, this.age, this.location);
+}
+```
+
+**Multiple constructors**
+
+```dart
+class Customer {
+  // ...
+
+  Customer(String name, int age, String location) {
+    this.name = name;
+    this.age = age;
+    this.location = location;
+  }
+
+  // Named constructor - for multiple constructors
+  Customer.withoutLocation(this.name, this.age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  Customer.empty() {
+    name = "";
+    age = 0;
+    location = "";
+  }
+
+  @override
+  String toString() {
+    return "Customer [name=${this.name},age=${this.age},location=${this.location}]";
+  }
+}
+```
+
+**Short form**
+
+You can write it more simply with Syntactic sugar:
+
+```dart
+Customer(this.name, this.age, this.location);
+
+Customer.withoutLocation(this.name, this.age);
+
+Customer.empty() {
+  name = "";
+  age = 0;
+  location = "";
+}
+```
+
+Now we can create new `Customer` object by these methods.
+
+```dart
+var customer = Customer("bezkoder", 26, "US");
+print(customer);
+// Customer [name=bezkoder,age=26,location=US]
+
+var customer1 = Customer.withoutLocation("zkoder", 26);
+print(customer1);
+// Customer [name=zkoder,age=26,location=null]
+
+var customer2 = Customer.empty();
+print(customer2);
+// Customer [name=,age=0,location=]
+```
+
+## Redirecting Constructor
+
+We can redirect a constructor to another constructor in the same class by using a colon (:). Remember that body of Redirecting Constructor is empty.
+
+For example, I will rewrite `Customer.empty()` & `Customer.withoutLocation()` above.
+
+```dart
+class Customer {
+  String name;
+  int age;
+  String location;
+
+  Customer(this.name, this.age, this.location);
+
+  // Redirecting constructors
+  Customer.empty() : this("", 0, "");
+  Customer.withoutLocation(String name, int age) : this(name, age, "");
+```
+
+Let’s run and check again:
+
+```dart
+var customer1 = Customer.empty();
+print(customer1);
+// Customer [name=,age=0,location=]
+
+var customer2 = Customer.withoutLocation("zkoder", 26);
+print(customer2);
+// Customer [name=zkoder,age=26,location=]
+```
+
+## Factory Constructor in Dart/Flutter
+
+We can use the `factory` keyword for a constructor that return an object instead of creating a new instance.
+
+```dart
+
+class Customer {
+  String name;
+  int age;
+  String location;
+
+  Customer(this.name, this.age, this.location);
+  static final Customer origin = Customer("", 0, "");
+
+  // factory constructor
+  factory Customer.create() {
+    return origin;
+  }
+
+//   @override
+//   String toString() { ... }
+}
+
+void main() {
+  var customer = Customer.create();
+  print(customer);
+  // Customer [name=,age=0,location=]
+}
+```
+
+### Dart Constructor using Square brackets: Positional optional parameters
+
+```dart
+class Customer {
+  String name;
+  int age;
+  String location;
+
+  // Positional optional parameters
+  Customer(this.name, [this.age, this.location]);
+
+  @override
+  String toString() {
+    return "Customer [name=${this.name},age=${this.age},location=${this.location}]";
+  }
+}
+```
+
+Let’s make some test by calling constructor without the optional parameters:
+
+```dart
+var customer = Customer("bezkoder", 26, "US");
+print(customer);
+// Customer [name=bezkoder,age=26,location=US]
+
+var customer1 = Customer("bezkoder", 26);
+print(customer1);
+// Customer [name=bezkoder,age=26,location=null]
+
+var customer2 = Customer("zkoder");
+print(customer2);
+// Customer [name=zkoder,age=null,location=null]
+```
+
+### Dart Constructor using Curly braces: Named optional parameters
+
+```dart
+class Customer {
+  String name;
+  int age;
+  String location;
+
+  // Named optional parameters
+  Customer(this.name, {this.age, this.location});
+
+  @override
+  String toString() {
+    return "Customer [name=${this.name},age=${this.age},location=${this.location}]";
+  }
+}
+```
+
+When calling the constructor, we have to use parameter name to assign a value which separated with colan `paramName: value`.
+
+```dart
+var customer = Customer("bezkoder", location: "US", age: 26);
+print(customer);
+// Customer [name=bezkoder,age=26,location=US]
+
+var customer1 = Customer("bezkoder", age: 26);
+print(customer1);
+// Customer [name=bezkoder,age=26,location=null]
+
+var customer2 = Customer("zkoder");
+print(customer2);
+// Customer [name=zkoder,age=null,location=null]
+```
+
+## Dart/Flutter Constructor default value
+
+For the constructors with either Named or Positional parameters, we can use `=` to define default values.
+
+The default values must be compile-time constants. If we don’t provide value, the default value is null.
+
+### Positional optional parameters
+
+```dart
+class Customer {
+  String name;
+  int age;
+  String location;
+
+  Customer(this.name, [this.age, this.location = "US"]);
+
+  @override
+  String toString() {
+    return "Customer [name=${this.name},age=${this.age},location=${this.location}]";
+  }
+}
+```
+
+Now create some `Customer` objects, you can see that default value for `age` is `null` and for `location` is `"US"`.
+
+```dart
+var customer = Customer("bezkoder", 26, "US");
+print(customer);
+// Customer [name=bezkoder,age=26,location=US]
+
+var customer1 = Customer("bezkoder", 26);
+print(customer1);
+// Customer [name=bezkoder,age=26,location=US]
+
+var customer2 = Customer("zkoder");
+print(customer2);
+// Customer [name=zkoder,age=null,location=US]
+```
+
+### Named optional parameters
+
+```dart
+class Customer {
+  String name;
+  int age;
+  String location;
+
+  Customer(this.name, {this.age, this.location = "US"});
+
+  @override
+  String toString() {
+    return "Customer [name=${this.name},age=${this.age},location=${this.location}]";
+  }
+}
+```
+
+Let’s run to check default values for `age` & `location`.
+
+```dart
+var customer = Customer("bezkoder", age: 26, location: "US");
+print(customer);
+// Customer [name=bezkoder,age=26,location=US]
+
+var customer1 = Customer("bezkoder", age: 26);
+print(customer1);
+// Customer [name=bezkoder,age=26,location=US]
+
+var customer2 = Customer("zkoder");
+print(customer2);
+// Customer [name=zkoder,age=null,location=US]
+```
+
+## Constant constructor
+
+If we want all intances of our class will never change, we can define a const constructor in which all fields are `final`.
+
+```dart
+class ImmutableCustomer {
+  final String name;
+  final int age;
+  final String location;
+
+  // Constant constructor
+  const ImmutableCustomer(this.name, this.age, this.location);
+}
+```
+
+Now we can put the `const` keyword before the constructor name:
+
+```dart
+var immutableCustomer = const ImmutableCustomer("zkoder", 26, "US");
+// immutableCustomer.name = ... // compile error
+```
+
+**Functions**
+
+In Dart with my understanding, method parameter can be given in two type.
+
+- Required parameter
+- Optional parameter (positional, named & default)
+
+**>> Required Parameter**
+
+Required parameter is a well know old style parameter which we all familiar with it
+
+***example\****:*
+
+```dart
+findVolume(int length, int breath, int height) {
+ print('length = $length, breath = $breath, height = $height');
+}
+
+findVolume(10,20,30);
+```
+
+***output:\***
+
+```dart
+length = 10, breath = 20, height = 30
+```
+
+**>> Optional Positional Parameter**
+
+parameter will be disclosed with square bracket **[ ]** & square bracketed parameter are optional.
+
+***example:\***
+
+```dart
+findVolume(int length, int breath, [int height]) {
+ print('length = $length, breath = $breath, height = $height');
+}
+
+findVolume(10,20,30);//valid
+findVolume(10,20);//also valid
+```
+
+***output:\***
+
+```dart
+length = 10, breath = 20, height = 30
+length = 10, breath = 20, height = null // no value passed so height is null
+```
+
+***>> Optional Named Parameter\***
+
+- parameter will be disclosed with curly bracket { }
+- curly bracketed parameter are optional.
+- have to use parameter name to assign a value which separated with colan **:**
+- in curly bracketed parameter order does not matter
+- these type parameter help us to avoid confusion while passing value for a function which has many parameter.
+
+***example:\***
+
+```dart
+findVolume(int length, int breath, {int height}) {
+ print('length = $length, breath = $breath, height = $height');
+}
+
+findVolume(10,20,height:30);//valid & we can see the parameter name is mentioned here.
+findVolume(10,20);//also valid
+```
+
+***output:\***
+
+```dart
+length = 10, breath = 20, height = 30
+length = 10, breath = 20, height = null
+```
+
+***>> Optional Default Parameter\***
+
+- same like optional named parameter in addition we can assign default value for this parameter.
+- which means no value is passed this default value will be taken.
+
+***example:\***
+
+```dart
+findVolume(int length, int breath, {int height=10}) {
+ print('length = $length, breath = $breath, height = $height');
+} 
+
+findVolume(10,20,height:30);//valid
+findVolume(10,20);//valid 
+```
+
+***output:\***
+
+```dart
+length = 10, breath = 20, height = 30
+length = 10, breath = 20, height = 10 // default value 10 is taken
+```
+
 > **@required** is exported from the **foundation.dart** file
+
+**Final** - Runtime constant
+
+**Const** - compile time constant
+
+All the types in **Dart** are treated as objects.Hence, Dart will not store the values in the variables.It only stores the address.
+
+**String Interpolation**
+
+```dart
+var a = 10;
+print('$a');
+var b = {
+  c: '10'
+}
+print('${b.c}'); // needs braces
+```
+
+**Date Formatting using `intl`**
+
+```dart
+DateFormat().format(date); // returns string
+// or
+DateFormat('<Format-pattern>').format(date);
+// or some pre-configured pattern
+DateFormat.yMMMd().format(date); // May 20, 2019
+```
+
+| S.No | Format                      | Sign       |
+| ---- | --------------------------- | ---------- |
+| 1    | ABBR_WEEKDAY                | E          |
+| 2    | WEEKDAY                     | EEEE       |
+| 3    | ABBR_STANDALONE_MONTH       | LLL        |
+| 4    | STANDALONE_MONTH            | LLLL       |
+| 5    | NUM_MONTH                   | M          |
+| 6    | NUM_MONTH_DAY               | Md         |
+| 7    | NUM_MONTH_WEEKDAY_DAY       | MEd        |
+| 8    | ABBR_MONTH                  | MMM        |
+| 9    | ABBR_MONTH_DAY              | MMMd       |
+| 10   | ABBR_MONTH_WEEKDAY_DAY      | MMMEd      |
+| 11   | MONTH                       | MMMM       |
+| 12   | MONTH_DAY                   | MMMMd      |
+| 13   | MONTH_WEEKDAY_DAY           | MMMMEEEEd  |
+| 14   | ABBR_QUARTER                | QQQ        |
+| 15   | QUARTER                     | QQQQ       |
+| 16   | YEAR                        | y          |
+| 17   | YEAR_NUM_MONTH              | yM         |
+| 18   | YEAR_NUM_MONTH_DAY          | yMd        |
+| 19   | YEAR_NUM_MONTH_WEEKDAY_DAY  | yMEd       |
+| 20   | YEAR_ABBR_MONTH             | yMMM       |
+| 21   | YEAR_ABBR_MONTH_DAY         | yMMMd      |
+| 22   | YEAR_ABBR_MONTH_WEEKDAY_DAY | yMMMEd     |
+| 23   | YEAR_MONTH                  | yMMMM      |
+| 24   | YEAR_MONTH_DAY              | yMMMMd     |
+| 25   | YEAR_MONTH_WEEKDAY_DAY      | yMMMMEEEEd |
+| 26   | YEAR_ABBR_QUARTER           | yQQQ       |
+| 27   | YEAR_QUARTER                | yQQQQ      |
+| 28   | HOUR24                      | H          |
+| 29   | HOUR24_MINUTE               | Hm         |
+| 30   | HOUR24_MINUTE_SECOND        | Hms        |
+| 31   | HOUR                        | j          |
+| 32   | HOUR_MINUTE                 | jm         |
+| 33   | HOUR_MINUTE_SECOND          | jms        |
+| 34   | HOUR_MINUTE_GENERIC_TZ      | jmv        |
+| 35   | HOUR_MINUTE_TZ              | jmz        |
+| 36   | HOUR_GENERIC_TZ             | jv         |
+| 37   | HOUR_TZ                     | jz         |
+| 38   | MINUTE                      | m          |
+| 39   | MINUTE_SECOND               | ms         |
+| 40   | SECOND                      | s          |
+
+**Examples Using the US Locale:**
+
+  **Pattern                                                        Result**
+
+1.  new DateFormat.yMd()                          -> 7/10/1996
+2.  new DateFormat("yMd")                        -> 7/10/1996
+3.  new DateFormat.yMMMMd("en_US")   -> July 10, 1996
+4.  new DateFormat.jm()                             -> 5:08 PM
+5.  new DateFormat.yMd().add_jm()           -> 7/10/1996 5:08 PM
+6.  new DateFormat.Hm()                           -> 17:08 // force 24 hour time
 
 **To change the keyboard type in TextField**
 
@@ -369,8 +992,6 @@ showModalBottomSheet(context: ctx, builder: (bCtx) {
   return Widget();
 },);
 ```
-
-
 
 > **context** means metadata about the widget. It holds the information about the widget like where the widget has been mounted.
 
@@ -424,7 +1045,7 @@ Image.asset('/image', fit: BoxFit.cover), // this needs a wrapper to control
 
 ```dart
 FlatButton(child: Text('Choose Date'), onPressed: (){
-   showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2019),    lastDate: DateTime.now()),
+   showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2019),    lastDate: DateTime.now()),`
 },),
 ```
 

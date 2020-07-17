@@ -61,6 +61,19 @@ return CupertinoTabScaffold(
 
 ### <u>Material Widgets</u>
 
+### * Basics
+
+#### Card
+
+Card widget by default will take width and height of the child that ot holds. To control the width and height either
+
+1. Wrap the child of the card with `Container` and assign width
+2. Wrap the `Card` widget with `Container` widget and assign width
+
+#### Column
+
+Column widget will take as much height it can take
+
 
 
 ### <u>Cupertino Widgets</u>
