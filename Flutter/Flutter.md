@@ -954,6 +954,19 @@ DateFormat.yMMMd().format(date); // May 20, 2019
 5.  new DateFormat.yMd().add_jm()           -> 7/10/1996 5:08 PM
 6.  new DateFormat.Hm()                           -> 17:08 // force 24 hour time
 
+>SingleChildScrollView. + Column = ListView
+>
+>ListView must have controllable height from parent
+
+**Using ListView**
+
+ListView must have bounded width
+
+**Types*
+
+* ListView
+* ListView.builder()
+
 **To change the keyboard type in TextField**
 
 ```dart
@@ -995,7 +1008,21 @@ showModalBottomSheet(context: ctx, builder: (bCtx) {
 
 > **context** means metadata about the widget. It holds the information about the widget like where the widget has been mounted.
 
+**HitTestBehavior**
+
+To Avoid the default gesture functionality for a Widget.
+
+```dart
+GestureDetector(child: Container(), onTap: () {}, behavior: HitTestBehavior.opaque);
+```
+
 **Theming**
+
+> primaryColor - It is a just single color
+>
+> primarySwitch - It is a combination of colors that creates different shades. These different shades will be used by widgets internally.So always better to use `primarySwatch`.
+
+> Secondary color is called as `accentColor`
 
 ```dart
 theme: ThemeData(
@@ -1006,13 +1033,13 @@ theme: ThemeData(
     accentColor: Color.amber,
     fontFamily: 'OpenSans',
     appBarTheme: AppBarTheme(
-          textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontSize: 20,
-                ),
-              ),
+      textTheme: ThemeData.light().textTheme.copyWith(
+        title: TextStyle(
+          fontFamily: 'OpenSans',
+          fontSize: 20,
         ),
+      ),
+    ),
   errorColor: Colors.red,
 ),
 ```
