@@ -294,3 +294,19 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 **[Constructors in dart](https://medium.com/jay-tillu/constructors-in-dart-4f972186c372#:~:text=By%20using%20named%20constructor%20you,can%20identify%20each%20of%20them](https://medium.com/jay-tillu/constructors-in-dart-4f972186c372#:~:text=By using named constructor you,can identify each of them))**
 
+[InheritedWidget](https://stackoverflow.com/questions/54069239/whats-the-best-practice-to-keep-all-the-constants-in-flutter)
+
+**[ShaderMask](https://stackoverflow.com/questions/51686868/gradient-text-in-flutter)**
+
+**[Best Practices dart](https://medium.com/flutter-community/flutter-best-practices-and-tips-7c2782c9ebb5)**
+
+**[Tree Data structures in javascript](https://adrianmejia.com/data-structures-for-beginners-trees-binary-search-tree-tutorial/#)**
+
+**[Selectors in redux](https://github.com/reduxjs/reselect#motivation-for-memoized-selectors)**
+
+**[AppBar and its Parameters](https://medium.com/flutteropen/flutter-widgets-07-appbar-86cae58244cd)**
+
+**[context in initState flutter](https://stackoverflow.com/questions/49457717/flutter-get-context-in-initstate-method)**
+
+**[Bottom Navigation with Floating action button](https://medium.com/flutter-community/attach-fab-within-a-bottomappbar-e4ab8c43fc7f)**
+

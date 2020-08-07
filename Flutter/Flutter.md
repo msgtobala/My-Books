@@ -1090,14 +1090,18 @@ FlatButton(child: Text('Choose Date'), onPressed: (){
 
 **Responsive**
 
+Running the APP in,
+
 * Portrait mode
 * Landscape
 * Tablet, Desktop
 
 **Adaptive**
 
-* Android
-* IOS
+Different look and Feel in,
+
+* Android - material design, android page transitions, android animations, android default fonts
+* iOS - Cupertino design, iOS animations, ios page transitions. The main important factor is to run the app with responsive and adaptive design
 
 **Dynamic width and height**
 
@@ -1132,6 +1136,7 @@ return LayoutBuilder(builder: (ctx, constraints) {
 import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -1141,6 +1146,8 @@ void main() {
 ```
 
 > if this is not working use this inside of MyApp build method
+>
+> Import `SystemChrome` from 'package:flutter/services.dart'
 
 #### Adaptive Design
 
@@ -1157,6 +1164,12 @@ Switch.adaptive(
 	onChanged: (){},
   value: true
 )
+```
+
+**To know the space occupied by keyboard**
+
+```dart
+Padding(padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10 + MediaQuery.of(context).viewInsets.bottom));
 ```
 
 **To detect the platform that we are running**
@@ -1233,7 +1246,7 @@ But the downside is that we cannot acheive all the theme features.So use `Theme.
 
 ##### Types of trees
 
-* Widget Tree - Controlled by code - frequently rebuilt
+* Widget Tree - Controlled by code - frequently rebuilt-It is bascially a configuration of widgets
 * Element Tree - controlled by flutter - internaly depends on **widget tree** - not frequently rebuilt
 * Render Tree - controlled by flutter -  internaly depends on **widget tree** - final output - not frequently rebuilt
 
@@ -1273,28 +1286,32 @@ Also, whenever there is change in `of(context)` changes there is re-rendering wi
 
 **Lifecycles in Flutter**
 
+##### Stateless widgets
+
+* constructor
+* build
+
 ##### Stateful widgets
 
 * constructor
-* initState
-* build
-
-##### Statless widgets
-
-* constructor
-* initState - runs once not on every rebuilt - used to make http request - no setState in initState
+* initState - runs once not on every build - used to make http request - no setState in initState(super.initState first and logic follows next)
 * build - essential method
-* didUpdateWidget - called after setState is called / when the widget is updated - used to make http calls
-* dispose - called when the widget unmount
+* didUpdateWidget - called after setState is called / when the widget is updated - used to make http calls(used for comparing widgets)
+* dispose - called when the widget unmounts- used to clear listeners and cleaning the memory
 
 ###### App Lifecycle
 
-* inactive
-* paused
-* resumed
-* suspending - about to be closed
+* inactive - no user input(switching will go to inactive first)
+* paused - minimised
+* resumed - when the app is visible again
+* suspending - the app is about to be closed
 
 #### Implementation
+
+* Need to add mixin with the class  `with WidgetsBindingObserver`
+* Need to add `didChangeAppLifecyleState(AppLifecyleState)`
+* Need to register observer for listening the App cycle changes in initState
+* Need to remove obsever in dispose() to clean
 
 ```dart
 class _NewTransactionState extends State<NewTransaction>
@@ -1330,10 +1347,14 @@ class _NewTransactionState extends State<NewTransaction>
 
 #### key in flutter
 
-Every widget can have a key but not stateless widget
+Keys are .Every widget can have a key but not stateless widget
 
-* UniqueKey - system generated
-* ValueKey - user generated
+* UniqueKey - used when there is no unique data be provided for the key
+* ValueKey - used when there is unique data be provided for the key
+* ObjectKey - 
+* PageStorageKey - Used to preserve the scroll location
+* GlobalKey
+  * Used when state/information of a widget needs to be shared to other widgets in any parts of the tree
 
 **Random**
 
@@ -1342,6 +1363,24 @@ import 'dart:math';
 
 print(Random().nextInt(4)); will generate a random integer btwn 0 - 4
 ```
+
+### Routing
+
+**GridView**
+
+```dart
+GridView(
+	children: [],
+  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+  	maxCrossAxisExtent: 200, // width
+    childAspectRatio: 3/2, 
+    crossAxisSpacing: 20,
+    mainAxisSpacing: 20,
+  ),
+);
+```
+
+
 
 **Route**
 
@@ -2389,7 +2428,7 @@ class InheritedData extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWiget) => true;
   
   static InheritedData of(BuildContext context) =>
-    	context.inheritFromWidgetOfExactType(InheritedData);
+    	context.dependOnInheritedWidgetOfExactType();
 }
 
 
@@ -2433,6 +2472,42 @@ class InheritedData extends InheritedWidget {
 // descendent children can use like
 InheritedData.of(context).service.call();
 InheritedData.of(context).service.print();
+```
+
+Other Example
+
+```dart
+class MyConstants extends InheritedWidget {
+  static MyConstants of(BuildContext context) => context. dependOnInheritedWidgetOfExactType<MyConstants>();
+
+  const MyConstants({Widget child, Key key}): super(key: key, child: child);
+
+  final String successMessage = 'Some message';
+
+  @override
+  bool updateShouldNotify(MyConstants oldWidget) => true;
+}
+```
+
+Then inserted at the root of your app:
+
+```dart
+void main() {
+  runApp(
+    MyConstants(
+      child: MyApp(),
+    ),
+  );
+}
+```
+
+And used as such:
+
+```dart
+@override
+Widget build(BuilContext context) {
+  return Text(MyConstants.of(context).successMessage);
+}
 ```
 
 ###### Generate color dynamically
@@ -2875,15 +2950,96 @@ Hero(
        );
    ```
 
-   **Page Transition**
+   **Custom Page Transition**
+
+   install package `animations: ^1.1.1`
+
+   ```dart
+   Scaffold(
+         appBar: AppBar(
+           title: Text(_pages[_activePage]['pageName']),
+         ),
+         drawer: MainDrawer(),
+         body: PageTransitionSwitcher(
+               child: _pages[_activePage]['page'],
+               duration: const Duration(milliseconds: 300),
+               reverse: // dynamic value(true / false),
+               transitionBuilder: (Widget child, Animation<double> animation, Animation<double> secondaryAnimation,){
+                   retrun SharedAxisTransition(child: child, animation: animation, secondaryAnimation: secondaryAnimation, transitionType: SharedAxisTransitionType.horizontal);
+          }),
+         bottomNavigationBar: BottomNavigationBar(
+           unselectedItemColor: Colors.white,
+           selectedItemColor: Theme.of(context).accentColor,
+           currentIndex: _activePage,
+           onTap: _selectPage,
+           items: [
+             BottomNavigationBarItem(
+               icon: Icon(Icons.category),
+               title: Text('Categories'),
+             ),
+             BottomNavigationBarItem(
+               icon: Icon(Icons.favorite),
+               title: Text('Favorites'),
+             ),
+           ],
+           backgroundColor: Theme.of(context).primaryColor,
+         ),
+       )
+   ```
 
    
 
+   **Adding App icons**
 
+   1. Generate the App icon files from [AppIconGenerator](https://appicon.co/)`
+   2. Android, flutter_app > android > app > src > res.
+   3. replace the mipmap folders with the new generated folders
+   4. iOS, flutter_app > iOS > Runner > Assets.xcassets.
+   5. replace and Assets.xcassets folder with new generated folder.
 
+   **To create a clean circular app icon in android**
 
+   1. Go to android studio
+   2. Open the flutter project
+   3. Go to android > app > src > res
+   4. Right click the res, select Image Asset
+   5. Adjust as per the need
+   6. Override the old image
+   7. Click next and there you go
 
+   **Debuging in Real device**
 
+   * Android
+
+     1. Enable **Developer Options** in settings
+     2. Tap on Build number
+     3. Go to Developer options > Enable USB Debugging
+     4. Connect the phone with USB
+     5. Allow the prompt for Debugging(Always Allow)
+     6. Hoolaa, we will be getting the device detected in Android Studio / VS Code
+
+     sudo gem install cocoapods
+     pod setup
+
+   * iOS
+
+     1. Should have a Apple id and mac system
+     2. Need iphone device
+     3. Need xcode installed in the mac system
+     4. The ios version and xcode version should be in sync(can be less than 2 versions)
+     5. Xcode version should be ahead or equal to iphone ios version
+     6. Install [homebrew](brew.sh) (optional / old steps) or
+     7. Run the below commands(new steps)
+     8. Add apple id to Xcode
+     9. open iOS folder in xcode / open Runner.xcworkspace in Xcode
+     10. Click on the Runner on the left tab, add Apple ID in `team`
+     11. Select the added account
+     12. Connect the phone with USB
+     13. Allow the prompt with `Trust`
+     14. Need to Trust our Development certificate
+     15. Go to the iPhone settings > General > Device management > Apple ID > Trust Apple ID > allow the prompt
+     16. Create Unique Bundle id, Change the bundle identifier
+     17. Run the App in the device using Android Studio / VS Code
 
 
 

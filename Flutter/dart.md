@@ -195,6 +195,257 @@ main() {
 }
 ```
 
+```dart
+void main() {
+  var a = 1;
+  var b = 2; // not null
+  print(b ??= a); // -> prints b as 2
+}
+
+void main() {
+  var a = 1;
+  var b; // null
+  print(b ??= a); // -> prints b as 1, since b is null a will be assigned to b 
+}
+```
+
+## Null-aware operators
+
+Dart offers some handy operators for dealing with values that might be null. One is the `??=` assignment operator, which assigns a value to a variable only if that variable is currently null:
+
+```dart
+int a; // The initial value of a is null.
+a ??= 3;
+print(a); // <-- Prints 3.
+
+a ??= 5;
+print(a); // <-- Still prints 3.
+```
+
+```dart
+print(1 ?? 3); // <-- Prints 1.
+print(null ?? 12); // <-- Prints 12.
+```
+
+## Conditional property access
+
+To guard access to a property or method of an object that might be null, put a question mark (`?`) before the dot (`.`):
+
+```dart
+myObject?.someProperty
+```
+
+The preceding code is equivalent to the following:
+
+```dart
+(myObject != null) ? myObject.someProperty : null
+```
+
+You can chain multiple uses of `?.` together in a single expression:
+
+```dart
+myObject?.someProperty?.someMethod()
+```
+
+```dart
+var a = 1;
+var b = 2;
+print(a?.b); // It will check if a is null, here a is not null then a.b = 1.2 = 2;
+ 
+
+var a;
+var b = 2;
+print(a?.b); // a is null, hence a.b cannot be performed hence null
+```
+
+## Cascades
+
+To perform a sequence of operations on the same object, use cascades (`..`). We’ve all seen an expression like this:
+
+```dart
+myObject.someMethod()
+```
+
+It invokes `someMethod()` on `myObject`, and the result of the expression is the return value of `someMethod()`.
+
+Here’s the same expression with a cascade:
+
+```dart
+myObject..someMethod()
+```
+
+Although it still invokes `someMethod()` on `myObject`, the result of the expression **isn’t** the return value — it’s a reference to `myObject`! Using cascades, you can chain together operations that would otherwise require separate statements. For example, consider this code:
+
+```dart
+var button = querySelector('#confirm');
+button.text = 'Confirm';
+button.classes.add('important');
+button.onClick.listen((e) => window.alert('Confirmed!'));
+```
+
+With cascades, the code becomes much shorter, and you don’t need the `button` variable:
+
+```dart
+querySelector('#confirm')
+..text = 'Confirm'
+..classes.add('important')
+..onClick.listen((e) => window.alert('Confirmed!'));
+```
+
+## Getters and setters
+
+You can define getters and setters whenever you need more control over a property than a simple field allows.
+
+For example, you can make sure a property’s value is valid:
+
+```dart
+class MyClass {
+  int _aProperty = 0;
+
+  int get aProperty => _aProperty;
+
+  set aProperty(int value) {
+    if (value >= 0) {
+      _aProperty = value;
+    }
+  }
+}
+```
+
+You can also use a getter to define a computed property:
+
+```dart
+class MyClass {
+  List<int> _values = [];
+
+  void addValue(int value) {
+    _values.add(value);
+  }
+
+  // A computed property.
+  int get count {
+    return _values.length;
+  }
+}
+```
+
+## Use raw string
+
+A raw string can be used to avoid escaping only backslashes and dollars.
+
+```dart
+//Don't
+var s = 'This is demo string \\ and \$';
+
+
+//Do
+var s = r'This is demo string \ and $';
+```
+
+```dart
+try {
+  breedMoreLlamas();
+} on OutOfLlamasException {
+  // A specific exception
+  buyMoreLlamas();
+} on Exception catch (e) {
+  // Anything else that is an exception
+  print('Unknown exception: $e');
+} catch (e) {
+  // No specified type, handles all
+  print('Something really unknown: $e');
+}
+```
+
+**Multi constructors**
+
+```dart
+void main() {
+  print(Point.fromJson({'x': 1, 'y': 2}).x);
+}
+
+class Point {
+  final x;
+  final y;
+  
+  Point(this.x, this.y);
+//   factory Point.fromJson(Map<String, num> json)
+//     {
+//         return Point(json['x'],json['y']);
+//       }
+  
+  Point.fromJson(Map<String, num> json)
+    : x = json['x'],
+      y = json['y'] { Point(x, y); }
+}
+```
+
+## Named constructors
+
+To allow classes to have multiple constructors, Dart supports named constructors:
+
+```dart
+class Point {
+  double x, y;
+
+  Point(this.x, this.y);
+
+  Point.origin() {
+    x = 0;
+    y = 0;
+  }
+}
+```
+
+To use a named constructor, invoke it using its full name:
+
+```dart
+final myPoint = Point.origin();
+```
+
+## Factory constructors
+
+Dart supports factory constructors, which can return subtypes or even null. To create a factory constructor, use the `factory` keyword:
+
+```dart
+class Square extends Shape {}
+
+class Circle extends Shape {}
+
+class Shape {
+  Shape();
+
+  factory Shape.fromTypeName(String typeName) {
+    if (typeName == 'square') return Square();
+    if (typeName == 'circle') return Circle();
+
+    print('I don\'t recognize $typeName');
+    return null;
+  }
+}
+```
+
+## Redirecting constructors
+
+Sometimes a constructor’s only purpose is to redirect to another constructor in the same class. A redirecting constructor’s body is empty, with the constructor call appearing after a colon (`:`).
+
+```dart
+class Automobile {
+  String make;
+  String model;
+  int mpg;
+
+  // The main constructor for this class.
+  Automobile(this.make, this.model, this.mpg);
+
+  // Delegates to the main constructor.
+  Automobile.hybrid(String make, String model) : this(make, model, 60);
+
+  // Delegates to a named constructor
+  Automobile.fancyHybrid() : this.hybrid('Futurecar', 'Mark 2');
+}
+```
+
 ## Type Inference and Annotation
 
 Dart is strongly typed. Strongly typed languages take extra precaution and have rules and restrictions to ensure that a variable’s value always matches the variable’s static type.Also dart has type interference.
@@ -268,6 +519,8 @@ main() {
   print(dynamicVariable);
 }
 ```
+
+
 
 ![img](https://www.educative.io/api/collection/10370001/6069685319630848/page/4506757625806848/image/5302076584230912)
 
@@ -642,6 +895,45 @@ main() {
   String s1 = "hello";
   print(s1.indexOf("o"));
 }
+```
+
+## Optional positional parameters
+
+Dart has two kinds of function parameters: positional and named. Positional parameters are the kind you’re likely familiar with:
+
+```dart
+int sumUp(int a, int b, int c) {
+  return a + b + c;
+}
+// ···
+  int total = sumUp(1, 2, 3);
+```
+
+With Dart, you can make these positional parameters optional by wrapping them in brackets:
+
+```dart
+int sumUpToFive(int a, [int b, int c, int d, int e]) {
+  int sum = a;
+  if (b != null) sum += b;
+  if (c != null) sum += c;
+  if (d != null) sum += d;
+  if (e != null) sum += e;
+  return sum;
+}
+// ···
+  int total = sumUpToFive(1, 2);
+  int otherTotal = sumUpToFive(1, 2, 3, 4, 5);
+```
+
+Optional positional parameters are always last in a function’s parameter list. Their default value is null unless you provide another default value:
+
+```dart
+int sumUpToFive(int a, [int b = 2, int c = 3, int d = 4, int e = 5]) {
+// ···
+}
+// ···
+  int newTotal = sumUpToFive(1);
+  print(newTotal); // <-- prints 15
 ```
 
 ## Collections
