@@ -340,7 +340,7 @@ console.log(a); // 1
 In JS all the **variable declaration and function declarations**  are brought to the top.But initialization has to be done first 
 
 ```js
-console.log(a); // undefined
+console.log(a); 
 var a;
 a = 1;
 ```
@@ -361,7 +361,7 @@ a = 1;
 
 ```js
 function calc() {
-  console.log(2 + 3); // 5
+  console.log(2 + 3); 
 }
 calc();
 ```

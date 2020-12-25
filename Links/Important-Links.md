@@ -310,3 +310,39 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 **[Bottom Navigation with Floating action button](https://medium.com/flutter-community/attach-fab-within-a-bottomappbar-e4ab8c43fc7f)**
 
+**[Overlay widgets](https://www.didierboelens.com/2018/06/how-to-create-a-toast-or-notifications-notion-of-overlay/)**
+
+**[Cache or no cache](https://medium.com/firebase-developers/firestore-clients-to-cache-or-not-to-cache-or-both-8f66a239c329)**
+
+**[Flutter auto suggest/Flutter dropdown](https://medium.com/saugo360/https-medium-com-saugo360-flutter-using-overlay-to-display-floating-widgets-2e6d0e8decb9)**
+
+**[Flutter analytics with Firebase](https://medium.com/flutter-community/the-flutter-guide-to-firebase-analytics-9b99c6e27a6)**
+
+**[Connecting emulator with firebase flutter analytics](https://support.google.com/firebase/answer/7201382?hl=en&utm_id=ad)**
+
+**[Deploying artifacts in bitbucket downloads using pipeline](https://support.atlassian.com/bitbucket-cloud/docs/deploy-build-artifacts-to-bitbucket-downloads/)**
+
+**[Error: Could not find included file 'Generated.xcconfig' in search paths (in target 'Runner')](https://stackoverflow.com/questions/54321180/error-could-not-find-included-file-generated-xcconfig-in-search-paths-in-tar)**
+
+**[Firebase and Flutter](https://www.youtube.com/watch?v=Mx24wiPilHg)**
+
+**[Android Adaptive icons]()**
+
+**[Tab bar without appbar in flutter](https://stackoverflow.com/questions/45588300/can-i-use-a-tabbar-and-tabbarview-as-an-in-page-widget)**
+
+**[Interview questions](https://docs.google.com/document/d/1Ij1NTJmQIEUpTDMTvZKPKPlTbZQUVeIpTPF9bW4pCvk/edit)**
+
+**[ColorFilter in flutter](https://medium.com/@samarth_agarwal/turn-images-to-grayscale-in-flutter-the-colorfiltered-widget-16de44cf8045)**
+
+**[Maps in dart](https://www.woolha.com/tutorials/dart-using-map-hashmap-linkedhashmap-splaytreemap-examples#:~:text=In%20Dart%2C%20an%20entry%20of,implementation%20HashMap%20%2C%20LinkedHashMap%20or%20SplayTreeMap%20.)**
+
+**[50 Resources for free](https://denic.hashnode.dev/50-free-tools-and-resources)**
+
+**[Flutter lifecycles](https://medium.com/flutter-community/flutter-lifecycle-for-android-and-ios-developers-8f532307e0c7)**
+
+**[Closures in JS](https://chrishosler.medium.com/closures-in-javascript-74bf3803fc22)**
+
+**[Currying in JS](https://medium.com/swlh/javascript-currying-731cecd3d57c)**
+
+
+

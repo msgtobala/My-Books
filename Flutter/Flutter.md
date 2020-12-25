@@ -873,9 +873,9 @@ length = 10, breath = 20, height = 10 // default value 10 is taken
 
 > **@required** is exported from the **foundation.dart** file
 
-**Final** - Runtime constant
+**final** - Runtime constant
 
-**Const** - compile time constant
+**const** - compile time constant
 
 All the types in **Dart** are treated as objects.Hence, Dart will not store the values in the variables.It only stores the address.
 
@@ -974,6 +974,28 @@ TextField(
 	controller: _fieldController,
   keyboardType: TextInputType.numberWithOptions(deciaml: true),
 );
+```
+
+**onEditingCompleted**
+
+This is an event just to tell/inform that the user has completed typing. This is the function which is responsible for closing the keyboard on 'completion' actions like 'Done', 'Go', 'Send'.This function will not close the keyboard on other 'non-completion' actions like 'Next'. 'Previous'.`onEditingCompleted` will always be called before `onSubmited`.This will not pass the value of input which the user is typing
+
+**onSubmitted**
+
+This is an event to perform business logic on the value on which the user typing.The callback conveniently passes the value to you, so you can do your business logic with it.
+
+If you don't like this behaviour, you should modify it. For example, "send" is considered a "completion action" here, thus in an Instant Messaging (chatting) app, each time user sends a short message, the keyboard will be collapsed, that's not good. But if we override the `onEditingComplete` callback to an empty function, it will stop the default behaviour and not hide the keyboard. For example:
+
+```dart
+TextField(
+  controller: _controller,
+  onSubmitted: (text) {
+    sendMessage(text);
+    _controller.clear();
+  },
+  onEditingComplete: () {},
+  textInputAction: TextInputAction.send,
+)
 ```
 
 **Actions in Appbar**

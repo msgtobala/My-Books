@@ -1240,3 +1240,284 @@ main() {
 }
 ```
 
+#### Iterables and Iterator
+
+An **iterable** is one kind of collection in Dart. It’s a collection that you can move through sequentially one element at a time. `List` and `Set` are two common examples of iterable collections. `Queue` is another one, though less common
+
+`EfficientLengthIterable` is itself a subclass of `Iterable`, a class you’ll learn more about later. So by its very definition, you can see that lists are iterables.
+
+Next you’ll see some of the benefits of being an iterable collection.
+
+## Iterating over the elements of a collection
+
+Being able to move sequentially through all the elements of a collection is a prerequisite for using a `for-in` loop.
+
+```
+final myList = [2, 4, 6];
+for (var number in myList) {
+  print(number);
+}
+```
+
+Since `List` is iterable, you’re able to *iterate* over it.
+
+Not all Dart collections are iterables, though. Most notably, `Map` isn’t. That’s why you can’t directly use a `for-in` loop with the elements of `Map` collection.
+
+If you try to do the following:
+
+```
+final myMap = {'a': 1, 'b':2, 'c':3};
+for (var element in myMap) {
+  print(element);
+}
+```
+
+You’ll get an error:
+
+```
+The type 'Map<String, int>' used in the 'for' loop must implement Iterable.
+```
+
+However, maps do have `keys` and `values` properties, which *are* of type `Iterable`. That means you can iterate over either of them. Here’s an example of iterating over the `keys`:
+
+```
+final myMap = {'a': 1, 'b':2, 'c':3};
+for (var key in myMap.keys) {
+  print('key: $key, value: ${myMap[key]}');
+}
+```
+
+## Other benefits of iterables
+
+An iterable gives you access to lots of other features besides being able to use them with a `for-in` loop. For example, there are quite a few higher order methods available, such as `map`, `where`, `fold`, and `expand`.
+
+Here’s an example of the `where` method, which is useful for filtering out certain elements of a collection:
+
+```
+const myList = [1, 2, 3, 4, 5, 6, 7, 8];
+final evenNumbers = myList.where((element) => element.isEven);
+print(evenNumbers);
+```
+
+This prints:
+
+```
+(2, 4, 6, 8)
+```
+
+There are parentheses surrounding the collection instead of square brackets because `where` returned an object of type `Iterable` rather than `List`. If you actually do want a `List` specifically, you can use the `toList` method that iterables have:
+
+```
+print(evenNumbers.toList());
+```
+
+This gives the expected square brackets:
+
+```
+[2, 4, 6, 8]
+```
+
+***Note\****: An iterable represents a potential collection of elements, but it doesn’t do the work of giving you those elements until you ask for it. That can be useful in situations where it might take some heavy work to calculate what the elements are. You don’t want to do that work unless you actually need the elements. However, when you call* `*toList*`*, you are forcing the iterable to iterate through all of the elements in order to create the list.*
+
+# How to create your own iterable
+
+As you learned above, `List`, `Set`, `Queue`, and the `keys` and `values` of `Map` are all iterables, but what if you want to create your own iterable type?
+
+To create an iterable class with all the benefits described above, you have to make an **iterator**. The reason is, an iterable doesn’t actually know how to iterate over its own elements. However, all iterables have an iterator, and it’s the job of the iterator to move sequentially through all the elements of the iterable.
+
+In the example below I’ll walk you through making your own iterable class along with its iterator.
+
+## Describing the problem
+
+In the example that follows, you’ll make a simple iterable whose elements are the runs of text between the points where it’s OK to make a line break. Since this is just a basic demonstration, you’ll just use a space character as a break point.
+
+For example, given the following string:
+
+```
+This is a long string that I want to iterate over.
+```
+
+The `|` characters show locations that it would be fine to line wrap at:
+
+```
+This |is |a |long |string |that |I |want |to |iterate |over.
+```
+
+The substrings between the `|` characters represent the elements of your iterable.
+
+## Make a class that extends Iterable
+
+The first thing you should do when making an iterable is extend the `Iterable` class.
+
+```
+class TextRuns extends Iterable<String> {
+  TextRuns(this.text);
+  final String text;  @override
+  Iterator<String> get iterator => TextRunIterator(text);
+}
+```
+
+I could have called it `LineBreaks`, but I decided on `TextRuns` to emphasize that the elements of the collection are strings.
+
+Notice that the only requirement for an iterable is that it has a getter named `iterator` of type `Iterator`. Like I said earlier, iterables don’t know how to iterate over their own elements themselves. That’s the job of the iterator.
+
+When you’re making your own iterable, you have to make your own iterator, too. In the code above, you can see that I called the iterator `TextRunIterator`. Since you haven’t made that yet, you’ll do that next.
+
+## Make a class that implements Iterator
+
+The iterator is where all the work gets done. Basic iterators only have to implement the following simple abstract class:
+
+```
+abstract class Iterator<E> {
+  E get current;
+  bool moveNext();
+}
+```
+
+The `E` represents a generic type and stands for element. That means that you can have a collection whose elements are of any type.
+
+While there are bidirectional iterables (the `runes` property of `String`, for example), a plain `Iterator` only moves one direction through the collection. Whenever, `moveNext` is called the iterator chooses the next element of the collection. It calls this element `current`.
+
+**Creating the basic class**
+
+Here is a start to `TextRunIterator`:
+
+```
+class TextRunIterator implements Iterator<String> {
+  TextRunIterator(this.text);
+  final String text;}
+```
+
+You’ll pass in the text string in the constructor, which comes from the iterable that you already made.
+
+**Adding private fields for the substring indexes**
+
+You haven’t implemented `current` or `moveNext` yet, but first think about how you are going to iterator over the breaks in a string. To get the text runs between the break locations, you’ll use String’s `substring` method, which has a start and end index. So add the following private fields to `TextRunIterator`:
+
+```
+int _startIndex = 0;
+int _endIndex = 0;
+```
+
+Although not a requirement, you’ll start from the beginning of the string, so you can initialize the indexes with `0`.
+
+**Adding the current getter**
+
+Next you’ll implement the `current` getter. Add the following lines to your class:
+
+```
+String _currentTextRun;@override
+String get current => _currentTextRun;
+```
+
+For now you haven’t really done anything. You’ll set `_currentTextRun` in the `moveNext` method in just a minite. If people try to get `current` before they call `moveNext` they’ll get a `null`.
+
+**Adding the moveNext method**
+
+Finally, implement `moveNext` by adding the following code:
+
+```
+@override
+bool moveNext() {
+  _startIndex = _endIndex;  if (_startIndex == text.length) {
+    _currentTextRun = null;
+    return false;
+  }  final next = text.indexOf(breakChar, _startIndex);
+  _endIndex = (next != -1) ? next + 1 : text.length;
+  _currentTextRun = text.substring(_startIndex, _endIndex);
+  return true;
+}final breakChar = RegExp(' ');
+```
+
+Here’s what’s happening:
+
+- When calculating the substring, `_startIndex` is inclusive while `_endIndex` is exclusive. At the beginning of each attempt to find the next substring, you’ll move the start index to wherever the last substring ended.
+- The `moveNext` method returns a Boolean. If `false`, it means that the iterator can’t move to the next element because there are no more. Because of that, you start by checking if `_startIndex` has reached the to the end of the text. Return `false` if it has.
+- Then you find the index of the next location of a line break character. The pattern matcher `breakChar` is a regular expression that matches a space character, but you could make it more sophisticated to match additional characters as well.
+- String’s `indexOf` returns `-1` if there is no match. In that case you’ll just set `_endIndex` to the end of the string. Otherwise, set `_endIndex` one character past the break character (since you’re including the break character in the preceding text run).
+- Finally, set `_currentTextRun` to the substring represented by `_startIndex` and `_endIndex`, and then return `true` to indicate that users can still call `moveNext` again.
+
+That completes your iterator, which also makes your iterable usable.
+
+## Using your iterable
+
+Now you can use your iterable as you would any other iterable. Here it is with a `for-in` loop:
+
+```
+const myString = 'This is a long string that I want to iterate over.';final myIterable = TextRuns(myString);
+for (var textRun in myIterable) {
+  print(textRun);
+}
+```
+
+Run that and you’ll see the following:
+
+```
+This 
+is 
+a 
+long 
+string 
+that 
+I 
+want 
+to 
+iterate 
+over.
+```
+
+# Full code
+
+Here is the full source code. You can also [play with it in DartPad](https://dartpad.dev/dfd2ba694699af6e7f494b5a2f3d2e7e).
+
+```dart
+void main() {
+  const myString = 'This is a long string that I want to iterate over.';
+  final myIterable = TextRuns(myString);
+  for (var textRun in myIterable) {
+    print(textRun);
+  }
+}
+
+class TextRuns extends Iterable<String> {
+  TextRuns(this.text);
+  final String text;
+
+  @override
+  Iterator<String> get iterator => TextRunIterator(text);
+}
+
+class TextRunIterator implements Iterator<String> {
+  TextRunIterator(this.text);
+  final String text;
+
+  String _currentTextRun;
+  int _startIndex = 0;
+  int _endIndex = 0;
+
+  final breakChar = RegExp(' ');
+
+  @override
+  String get current => _currentTextRun;
+
+  @override
+  bool moveNext() {
+    _startIndex = _endIndex;
+    if (_startIndex == text.length) {
+      _currentTextRun = null;
+      return false;
+    }
+    final next = text.indexOf(breakChar, _startIndex);
+    _endIndex = (next != -1) ? next + 1 : text.length;
+    _currentTextRun = text.substring(_startIndex, _endIndex);
+    return true;
+  }
+}
+```
+
+
+
+
+
+
+

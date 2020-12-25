@@ -143,25 +143,35 @@ ProductModel.fromFireStore(Map<String, dynamic> firestore)
 _db.collection('products').document(<documentId>).delete();
 ```
 
+**Caching**
 
+```dart
+ await Firestore.instance
+   .collection('/anonymoususers')
+   .getDocuments(source: Source.serverAndCache)
+   .then((value) {
+     value.documents.forEach((result) {
+       print(result.data['text']);
+     });
+   }).catchError((err) => print("error"));
+```
 
+* source: Source.serverAndCache - Server first and then cache(fallback)
+* source: Source.server - Always server
+* source: Source.cache - Always cache
 
+```dart
+const snapshot = await documentRef.getDocuments();
+if (snapshot.metadata.fromCache) {
+    // Buyer beware, this could be stale...
+}
+```
 
+Snapshot has `metadata` which contains `fromCache`. This is the metadata which tells the source of the data.
 
+If you make a query using the default `get()`, it’s possible to tell where that snapshot came from. Each `DocumentSnapshot` has a `SnapshotMetadata` object attached to it.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+If you’re digging around in that `SnapshotMetadata` object, you’ll also notice that there’s a `hasPendingWrites` property. A “pending write” means that the snapshot was written by the  client app, and cached locally, but hasn’t been synchronized with the  server yet. So, the local cache not only provides *read caching*, but also *write caching*.
 
 
 
