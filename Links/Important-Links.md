@@ -1,4 +1,4 @@
-[**Important facts of React**]( [**https://medium.freecodecamp.org/these-are-the-concepts-you-should-know-in-react-js-after-you-learn-the-basics-ee1d2f4b8030**](https://medium.freecodecamp.org/these-are-the-concepts-you-should-know-in-react-js-after-you-learn-the-basics-ee1d2f4b8030))
+**[Importance of React](https://medium.freecodecamp.org/these-are-the-concepts-you-should-know-in-react-js-after-you-learn-the-basics-ee1d2f4b8030)**
 
 [**Colspan and Rowspan**](https://html.com/tables/rowspan-colspan/)
 
@@ -344,5 +344,7 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 **[Currying in JS](https://medium.com/swlh/javascript-currying-731cecd3d57c)**
 
+**[Method Chaining in JS](https://medium.com/javascript-in-plain-english/object-oriented-javascript-3f74e02a436f)**
 
+**[Communicating with browsers in JS](https://kishoreconnect.com/javascript-cross-tab-cross-site-communication)**
 
