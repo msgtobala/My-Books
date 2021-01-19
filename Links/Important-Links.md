@@ -348,3 +348,13 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 **[Communicating with browsers in JS](https://kishoreconnect.com/javascript-cross-tab-cross-site-communication)**
 
+**[First Class functions](https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function)**
+
+**[Equality operator in js](https://stackabuse.com/javascript-loose-equality-operator-vs-strict-equality-operator/)**
+
+**[Maps in JS](https://medium.com/swlh/es6-map-object-6663ed1410f7)**
+
+**[Lifecycles in Flutter](https://www.bookstack.cn/read/flutterbyexample/aebe8dda4df3319f.md#4.%20didChangeDependencies())**
+
+**[String Function in JS](https://nialljoemaher.hashnode.dev/26-built-in-string-methods-or-javascript)**
+

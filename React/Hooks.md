@@ -5,6 +5,9 @@
 * Should be used only with **functional components**
 * Hooks cannot be nested (no nested hooks)
 *  should be imported from **react**
+*  Must be a the root level
+*  Should not declared/used inside of conditions/if statements or loops
+*  Should be used in Stateless components.
 
 #### useState()
 
@@ -191,7 +194,7 @@ export default App;
 
 #### useEffect()
 
-**useEffect** will be called always whenever the component **renders**. This will also be called for all setStates.
+**useEffect** will be called always whenever the component **renders** and **re-renders**. This will also be called for all setStates.
 
 ```react
 import React, { useState, useEffect } from 'react';

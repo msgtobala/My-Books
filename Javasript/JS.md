@@ -36,6 +36,16 @@ Javascript Engine uses **machine code** because this faster. Also **Javascript**
 
 ![HOW JS RUN](https://github.com/msgtobala/My-Books/blob/master/images/JS%20and%20Node%20JS.png?raw=true)
 
+**How JS works?**
+
+Everything in JS happens inside an **Execution context**.JS is synchronous single threaded language.JS executes the code in single thread synchronously one after the other lines in the code.
+
+| Memory component /Variable environment | Code Component / Thread of Execution                         |
+| :------------------------------------- | ------------------------------------------------------------ |
+| Key: value<br />a: 10<br />f: () {}    | *-----------code----------<br />*----------code-----------<br/>*--------code------------ |
+
+
+
 ## Versions of Javascript / What is ECMAScript
 
 **ECMAScript** is a superset of Javascript which has all the standardization to be implemented. **Javascript** is a dialect of ES.
@@ -2288,6 +2298,168 @@ var circle = createCircle(1);
 console.log(circle);
 // {radius: 1, draw: ƒ}
 ```
+
+**Function Statement**
+
+```js
+function a() { // This way of creating function is called function statement
+  console.log('hello');
+}
+a();
+```
+
+**Function Expression**
+
+```js
+const a = function () => { // This way of creating function is called function expression
+  console.log('hai');
+}
+a();
+```
+
+**Difference Between function expression and function statement**
+
+The actual difference between these two are `hosting`
+
+```js
+a(); // prints hello
+function a() {
+  console.log('hello');
+}
+
+b(); // hoisting will not work.This gives undefined
+const b = function () => { 
+  console.log('hai');
+}
+```
+
+**Function declaration**
+
+Function Statement is aka **Function declaration**
+
+**Anonymous Function**
+
+```js
+function () {
+  
+}
+```
+
+Creating anonymous function like this will throw error ` Uncaught SyntaxError: Function statements require a function name`.Just creating will throw error.
+
+They are meant to store in a variable as values
+
+```js
+var example = function () {
+  
+}
+```
+
+**Named Function Expression**
+
+```js
+var a = function b() {
+  console.log('hai');
+}
+// NOTE: it has two name
+// 1. as a
+// 2. as b
+```
+
+```js
+var a = function xyz() {
+  console.log('hai');
+}
+a(); // hai
+xyz(); // Reference error(This is because a is created as global variable, xyz is a local variable)
+```
+
+```js
+var a = function xyz() {
+  console.log(xyz);
+}
+a(); // f xyz(){ console.log(xyz); }
+```
+
+**Difference between Parameters and Arguments**
+
+```js
+function a(param1, param2) {
+  console.log(param1, param2);
+}
+
+a('argument1', 'arguments2');
+```
+
+**First Class function**
+
+The ability of the function to be passed as an argument/value and ability of the function be returned from another function is called as **First class function**
+
+1. A Function can be passed as argument
+2. A Function can be returned from another function.
+
+A Function can be passed as argument
+
+```js
+function xyz(param1) {
+  console.log(param1);
+}
+
+xyz(function () {});
+const a = function(){}
+xyz(a);
+```
+
+A Function can be returned from another function.
+
+```js
+function xyz() {
+  return function () {};
+}
+
+var a = xyz();
+console.log(a());
+```
+
+```js
+function xyz() {
+  return function example() {};
+}
+
+var a = xyz();
+console.log(a());
+```
+
+**Another name of First class functions is First class citizens**
+
+```js
+function sayHello() {
+   return "Hello, ";
+}
+function greeting(helloMessage, name) {
+  console.log(helloMessage() + name);
+}
+// Pass `sayHello` as an argument to `greeting` function
+greeting(sayHello, "JavaScript!");
+```
+
+We are passing our `sayHello()` function as an argument to the `greeting()` function, this explains how we are treating the function as a **value**.
+
+The function that we pass as an argument to another function, is called a **[Callback function](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function)**. *`sayHello` is a Callback function.*
+
+```js
+function sayHello() {
+   return function() {
+      console.log("Hello!");
+   }
+}
+```
+
+In this example; We need to return a function from another function - *We can return a function because we treated function in JavaScript as a **value**.*
+
+A function that returns a function is called a **Higher-Order Function**.
+
+****
 
 **Binding Rules in JS**
 
