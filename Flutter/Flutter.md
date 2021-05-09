@@ -3063,7 +3063,15 @@ Hero(
      16. Create Unique Bundle id, Change the bundle identifier
      17. Run the App in the device using Android Studio / VS Code
 
+**Difference between IgnorePointer and AbsorbPointer**
 
+Consider a blue square  on top red square, both are clickable, where the blue square is smaller and o red square is bigger
+
+By default, without `IgnorePointer`/`AbsorbPointer`, tapping the blue square will send a click event on blue and red gets nothing.
+
+In that situation, wrapping blue square into an `AbsorbPointer` means that when tapping the blue square, neither the blue square nor the red one gets the click event.
+
+If we instead used an `IgnorePointer`, the red square would receive click events when tapping the blue square.
 
 
 
