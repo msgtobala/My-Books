@@ -360,3 +360,6 @@ css: https://connoratherton.com/assets/css/loaders-c60722232c.css
 
 **[Axios interceptor in react](http://medium.com/swlh/handling-access-and-refresh-tokens-using-axios-interceptors-3970b601a5da)**
 
+[Road Map for frontend](https://javascript.plainenglish.io/roadmap-to-become-a-frontend-web-developer-in-2021-ee06abb21489)
+
+**[Intersection observer](https://dev.to/producthackers/intersection-observer-using-react-49ko)**
